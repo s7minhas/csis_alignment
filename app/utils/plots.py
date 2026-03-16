@@ -102,8 +102,8 @@ def diplomacy_vs_trade_scatter(anchor_df, year):
                    zerolinecolor="#EEEEEE"),
         yaxis=dict(title="← China · Trade Dependence · US →", range=[-1.1, 1.1], zeroline=True,
                    zerolinecolor="#EEEEEE"),
-        height=500, margin=dict(t=50),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        height=500, margin=dict(t=90),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
         plot_bgcolor="white",
     )
     return fig
@@ -215,8 +215,8 @@ def country_trajectory(anchor_df, iso3, country_name):
     fig.update_layout(
         title=title,
         xaxis_title=None,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=420, margin=dict(t=70),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=420, margin=dict(t=90),
         hovermode="x unified",
     )
 
@@ -265,8 +265,8 @@ def tilt_trajectory(anchor_df, iso3, country_name):
         title=title,
         xaxis_title=None,
         yaxis_title="← China · US →",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=420, margin=dict(t=70),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=420, margin=dict(t=90),
         hovermode="x unified",
     )
     return fig
@@ -294,7 +294,7 @@ def dyad_trajectory(dyad_df, iso3_1, iso3_2, name_1, name_2):
         title=f"{name_1} ↔ {name_2}: Diplomatic Alignment",
         xaxis_title=None, yaxis_title="Diplomatic Alignment",
         yaxis_range=[0, 1],
-        height=400, margin=dict(t=60),
+        height=400, margin=dict(t=90),
         showlegend=False,
     )
     return fig
@@ -317,8 +317,8 @@ def bloc_cohesion_chart(bloc_df):
     fig.update_layout(
         title="Within-Bloc Diplomatic Cohesion",
         xaxis_title=None, yaxis_title="Mean Pairwise Diplomatic Alignment",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400, margin=dict(t=60),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=400, margin=dict(t=90),
         hovermode="x unified",
     )
     return fig
@@ -343,8 +343,8 @@ def bloc_tilt_chart(bloc_df):
         title="Bloc-Level US vs China Tilt",
         xaxis_title=None,
         yaxis_title="← China · US →",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400, margin=dict(t=60),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=400, margin=dict(t=90),
         hovermode="x unified",
     )
     return fig
