@@ -4,10 +4,10 @@ CAVEAT_BOX = """
 > **What this measures, and what it does not.**
 > These scores reflect **diplomatic position-taking** at the UN General Assembly,
 > specifically how similarly countries vote on international resolutions covering
-> sovereignty, human rights, and security. High alignment means two countries
+> sovereignty, human rights, and security. High diplomatic alignment means two countries
 > take similar positions across these issue areas.
 >
-> Alignment in UNGA voting is **not** the same as being allies, trading partners,
+> Diplomatic alignment in UNGA voting is **not** the same as being allies, trading partners,
 > or friends. Countries can vote similarly while maintaining serious bilateral
 > tensions. India and China, for example, both vote with the Global South bloc
 > on many issues despite active border disputes.
@@ -48,8 +48,8 @@ For each pair of countries in each year, the model produces a **Diplomatic
 Alignment Score** (0 to 1), where 1 indicates identical positions and 0
 indicates maximally dissimilar positions.
 
-For each country in each year, the dashboard reports alignment with the US
-(0 to 1), alignment with China (0 to 1), and the US-China tilt (the difference
+For each country in each year, the dashboard reports diplomatic alignment with the US
+(0 to 1), diplomatic alignment with China (0 to 1), and the US-China tilt (the difference
 between the two, where positive values indicate closer proximity to US positions
 and negative values indicate closer proximity to Chinese positions).
 
@@ -114,17 +114,17 @@ UN member states.
 def format_alignment_description(score):
     """Return a plain-English description of an alignment score."""
     if score >= 0.9:
-        return "Very closely aligned"
+        return "Very closely aligned diplomatically"
     elif score >= 0.7:
-        return "Closely aligned"
+        return "Closely aligned diplomatically"
     elif score >= 0.5:
-        return "Moderately aligned"
+        return "Moderately aligned diplomatically"
     elif score >= 0.3:
-        return "Weakly aligned"
+        return "Weakly aligned diplomatically"
     elif score >= 0.15:
-        return "Distantly positioned"
+        return "Distantly positioned diplomatically"
     else:
-        return "Very distantly positioned"
+        return "Very distantly positioned diplomatically"
 
 
 def format_tilt_description(tilt):

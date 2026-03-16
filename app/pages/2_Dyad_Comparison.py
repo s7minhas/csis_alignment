@@ -54,7 +54,7 @@ dyad_data = dyad[
 ].sort_values("year")
 
 if len(dyad_data) == 0:
-    st.warning(f"No alignment data available for {name_1} — {name_2}.")
+    st.warning(f"No diplomatic alignment data available for {name_1} — {name_2}.")
     st.stop()
 
 latest = dyad_data.iloc[-1]
@@ -65,7 +65,7 @@ st.markdown(f"## {name_1} ↔ {name_2}")
 
 col_a, col_b, col_c = st.columns(3)
 col_a.metric(
-    f"Alignment ({int(latest['year'])})",
+    f"Diplomatic Alignment ({int(latest['year'])})",
     f"{latest['structural_alignment']:.3f}",
     help="0 = very distant, 1 = perfectly aligned",
 )

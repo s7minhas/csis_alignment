@@ -100,10 +100,10 @@ def diplomacy_vs_trade_scatter(anchor_df, year):
         title=f"Diplomacy vs Trade: Where Do They Diverge? ({year})",
         xaxis=dict(title="← China · Diplomatic Tilt · US →", range=[-1.1, 1.1], zeroline=True,
                    zerolinecolor="#EEEEEE"),
-        yaxis=dict(title="← China · Trade Tilt · US →", range=[-1.1, 1.1], zeroline=True,
+        yaxis=dict(title="← China · Trade Dependence · US →", range=[-1.1, 1.1], zeroline=True,
                    zerolinecolor="#EEEEEE"),
-        height=500, margin=dict(t=50),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        height=500, margin=dict(t=90),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
         plot_bgcolor="white",
     )
     return fig
@@ -215,8 +215,8 @@ def country_trajectory(anchor_df, iso3, country_name):
     fig.update_layout(
         title=title,
         xaxis_title=None,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=420, margin=dict(t=70),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=420, margin=dict(t=90),
         hovermode="x unified",
     )
 
@@ -226,7 +226,7 @@ def country_trajectory(anchor_df, iso3, country_name):
         fig.update_yaxes(title_text="Trade Share", range=[0, 1],
                          tickformat=".0%", secondary_y=True)
     else:
-        fig.update_yaxes(title_text="Alignment Score", range=[0, 1])
+        fig.update_yaxes(title_text="Diplomatic Alignment", range=[0, 1])
 
     return fig
 
@@ -251,7 +251,7 @@ def tilt_trajectory(anchor_df, iso3, country_name):
         trade_df = df.dropna(subset=["trade_US_minus_China"])
         fig.add_trace(go.Scatter(
             x=trade_df["year"], y=trade_df["trade_US_minus_China"],
-            name="Trade tilt", mode="lines",
+            name="Trade dependence", mode="lines",
             line=dict(color="#E08214", width=2.5, dash="dash"),
         ))
 
@@ -259,14 +259,14 @@ def tilt_trajectory(anchor_df, iso3, country_name):
 
     title = f"{country_name}: US-China Tilt"
     if has_trade:
-        title += " (Diplomacy vs Trade)"
+        title += " (Diplomatic Alignment vs Trade Dependence)"
 
     fig.update_layout(
         title=title,
         xaxis_title=None,
         yaxis_title="← China · US →",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=420, margin=dict(t=70),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=420, margin=dict(t=90),
         hovermode="x unified",
     )
     return fig
@@ -285,16 +285,16 @@ def dyad_trajectory(dyad_df, iso3_1, iso3_2, name_1, name_2):
         mode="lines+markers",
         line=dict(color=COLORS["neutral"], width=2.5),
         marker=dict(size=4),
-        name="Alignment",
+        name="Diplomatic Alignment",
     ))
 
     _add_event_lines(fig, (df["year"].min(), df["year"].max()))
 
     fig.update_layout(
         title=f"{name_1} ↔ {name_2}: Diplomatic Alignment",
-        xaxis_title=None, yaxis_title="Alignment Score",
+        xaxis_title=None, yaxis_title="Diplomatic Alignment",
         yaxis_range=[0, 1],
-        height=400, margin=dict(t=60),
+        height=400, margin=dict(t=90),
         showlegend=False,
     )
     return fig
@@ -316,9 +316,9 @@ def bloc_cohesion_chart(bloc_df):
 
     fig.update_layout(
         title="Within-Bloc Diplomatic Cohesion",
-        xaxis_title=None, yaxis_title="Mean Pairwise Alignment",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400, margin=dict(t=60),
+        xaxis_title=None, yaxis_title="Mean Pairwise Diplomatic Alignment",
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=400, margin=dict(t=90),
         hovermode="x unified",
     )
     return fig
@@ -343,8 +343,8 @@ def bloc_tilt_chart(bloc_df):
         title="Bloc-Level US vs China Tilt",
         xaxis_title=None,
         yaxis_title="← China · US →",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400, margin=dict(t=60),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        height=400, margin=dict(t=90),
         hovermode="x unified",
     )
     return fig

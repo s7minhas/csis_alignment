@@ -39,8 +39,8 @@ with col_slider:
 has_trade = "trade_US_minus_China" in anchor.columns
 color_options = ["Bloc membership"]
 if has_trade:
-    color_options.append("Trade US-China tilt")
-    color_options.append("Diplomacy-trade gap")
+    color_options.append("Trade dependence (US vs China)")
+    color_options.append("Diplomacy vs trade gap")
 
 with col_color:
     color_by = st.selectbox("Color by", color_options)
@@ -78,9 +78,9 @@ else:
     mag_min, mag_range = mag.min(), mag.max() - mag.min() + 0.01
     lat_merged["node_size"] = 4 + 16 * (mag - mag_min) / mag_range
 
-    if color_by == "Trade US-China tilt":
+    if color_by == "Trade dependence (US vs China)":
         color_col = "trade_US_minus_China"
-        color_label = "Trade tilt"
+        color_label = "Trade dependence"
         cmin, cmax = -0.8, 0.8
     else:
         # Diplomacy-trade gap = diplomatic tilt minus trade tilt
@@ -109,7 +109,7 @@ else:
             colorscale=[[0, "#B2182B"], [0.5, "#F7F7F7"], [1, "#2166AC"]],
             cmin=cmin, cmax=cmax,
             colorbar=dict(title=color_label, tickvals=[cmin, 0, cmax],
-                          ticktext=["← China", "Neutral", "US →"]),
+                          ticktext=["← China", "Balanced", "US →"]),
             line=dict(width=0.5, color="white"),
             opacity=0.85,
         ),
