@@ -215,33 +215,43 @@ def bloc_tilt_chart(bloc_df):
 
 
 def latent_space_scatter(latent_df, year, groups_df):
-    """Circular layout of latent positions for a given year.
+    """Circular layout of latent positions following lame's uv_plot.
 
-    Each country's latent vector is decomposed into direction (angle on circle)
-    and magnitude (distance from center). Countries pointing in similar directions
-    in the latent space occupy nearby positions on the circle. Magnitude reflects
-    how strongly a country's voting pattern deviates from the global mean.
-
-    This follows the circular layout from the lame package's uv_plot function.
+    Each country's latent vector is normalized to unit length to get its
+    angle (direction = which coalition it votes with). Countries are placed
+    ON the reference circle at that angle, with a small rank-based radial
+    jitter so overlapping nodes separate. Node SIZE encodes magnitude
+    (how strongly the country's voting deviates from the global mean).
     """
     import numpy as np
 
     df = latent_df[latent_df["year"] == year].copy()
 
-    # compute angle and magnitude from latent dimensions
-    df["angle"] = np.arctan2(df["dim2"].values, df["dim1"].values)
-    df["magnitude"] = np.sqrt(df["dim1"].values**2 + df["dim2"].values**2)
+    # magnitude and unit direction (matching lame uv_plot lines 186-200)
+    mag = np.sqrt(df["dim1"].values**2 + df["dim2"].values**2)
+    df["magnitude"] = mag
 
-    # rank-based radial jitter (mirrors lame uv_plot)
+    # normalize to unit vectors for angle
+    safe_mag = np.where(mag > 1e-10, mag, 1.0)
+    u_norm_x = df["dim1"].values / safe_mag
+    u_norm_y = df["dim2"].values / safe_mag
+
+    # rank-based radial jitter (matching lame uv_plot lines 204-211)
     n = len(df)
-    mag_rank = df["magnitude"].rank() / (n + 1)
-    jitter = 0.15
-    radii = 1.0 + jitter * (mag_rank - 0.5)
+    mag_rank = pd.Series(mag).rank().values / (n + 1)
+    jitter_factor = 0.15
+    radii = 1.0 + jitter_factor * (mag_rank - 0.5)
 
-    # project onto circle with magnitude-based offset
-    df["cx"] = radii * np.cos(df["angle"].values)
-    df["cy"] = radii * np.sin(df["angle"].values)
+    # place on circle at unit-vector angle, radius ~ 1 with jitter
+    df["cx"] = u_norm_x * radii
+    df["cy"] = u_norm_y * radii
 
+    # node size scaled by magnitude (matching lame uv_plot lines 272-276)
+    mag_min = mag.min()
+    mag_range = mag.max() - mag_min + 0.01
+    df["node_size"] = 4 + 16 * (mag - mag_min) / mag_range
+
+    # group labels
     df["group_label"] = "Other"
     df.loc[df["g7"] == True, "group_label"] = "G7"
     df.loc[df["brics_original"] == True, "group_label"] = "BRICS"
@@ -250,24 +260,36 @@ def latent_space_scatter(latent_df, year, groups_df):
     color_map = {"G7": COLORS["g7"], "BRICS": COLORS["brics"],
                  "Global South": COLORS["global_south"], "Other": "#AAAAAA"}
 
-    fig = px.scatter(
-        df, x="cx", y="cy",
-        color="group_label",
-        hover_name="name_common",
-        hover_data={"cx": False, "cy": False, "iso3": True,
-                    "group_label": False, "magnitude": ":.3f"},
-        color_discrete_map=color_map,
-        title=f"Diplomatic Alignment Space ({year})",
-        labels={"group_label": "Group"},
-    )
+    fig = go.Figure()
 
     # reference circle
-    theta = np.linspace(0, 2 * np.pi, 100)
+    theta = np.linspace(0, 2 * np.pi, 200)
     fig.add_trace(go.Scatter(
         x=np.cos(theta).tolist(), y=np.sin(theta).tolist(),
         mode="lines", line=dict(color="#DDDDDD", dash="dot", width=1),
         showlegend=False, hoverinfo="skip",
     ))
+
+    # plot each group separately for legend
+    for group_name in ["G7", "BRICS", "Global South", "Other"]:
+        gdf = df[df["group_label"] == group_name]
+        if len(gdf) == 0:
+            continue
+        fig.add_trace(go.Scatter(
+            x=gdf["cx"].tolist(),
+            y=gdf["cy"].tolist(),
+            mode="markers",
+            marker=dict(
+                size=gdf["node_size"].tolist(),
+                color=color_map.get(group_name, "#AAAAAA"),
+                opacity=0.8,
+                line=dict(width=0.5, color="white"),
+            ),
+            name=group_name,
+            text=gdf["name_common"].tolist(),
+            customdata=np.stack([gdf["iso3"].values, gdf["magnitude"].values], axis=-1),
+            hovertemplate="<b>%{text}</b><br>%{customdata[0]}<br>Magnitude: %{customdata[1]:.3f}<extra></extra>",
+        ))
 
     # labels for key countries
     key_labels = ["USA", "CHN", "RUS", "GBR", "IND", "BRA", "JPN", "KOR",
@@ -276,15 +298,17 @@ def latent_space_scatter(latent_df, year, groups_df):
         fig.add_annotation(
             x=row["cx"], y=row["cy"], text=row["iso3"],
             showarrow=False, font=dict(size=9, color="#333333"),
-            yshift=12,
+            yshift=max(8, row["node_size"] / 2 + 4),
         )
 
     fig.update_layout(
-        height=600, margin=dict(t=50),
+        title=f"Diplomatic Alignment Space ({year})",
+        height=650, margin=dict(t=50, l=20, r=20, b=20),
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, title=""),
-        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, title=""),
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
+                   title="", range=[-1.4, 1.4]),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
+                   title="", range=[-1.4, 1.4], scaleanchor="x", scaleratio=1),
+        plot_bgcolor="white",
     )
-    fig.update_yaxes(scaleanchor="x", scaleratio=1)
-    fig.update_traces(marker=dict(size=8, opacity=0.8))
     return fig
