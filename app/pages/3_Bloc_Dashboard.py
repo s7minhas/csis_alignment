@@ -141,6 +141,27 @@ st.dataframe(
     use_container_width=True,
 )
 
+# ── How to read ──
+with st.expander("How to read this page"):
+    st.markdown("""
+**Cohesion chart**: Shows how similarly bloc members vote with each other
+over time. Higher values mean the group acts as a more unified diplomatic
+bloc. A value of 0.90 means the average pair within the group votes very
+similarly.
+
+**Tilt chart**: Shows whether the bloc as a whole votes more like the US
+(positive) or more like China (negative). The dashed line at zero means
+equidistant.
+
+**Member chart**: Each line is one country's tilt over time, so you can see
+which members are pulling the bloc in different directions.
+
+**Snapshot table**: The most recent year's scores for every member, including
+both diplomatic alignment and trade dependence where available. The
+"Diplo. Tilt" column is color-coded: blue = votes more like the US, red =
+votes more like China.
+""")
+
 # ── Caveat ──
 with st.expander("Important caveats"):
     st.markdown(CAVEAT_BOX)

@@ -47,6 +47,7 @@ with st.sidebar:
     st.page_link("pages/2_Dyad_Comparison.py", label="Compare Two Countries")
     st.page_link("pages/3_Bloc_Dashboard.py", label="Bloc Dashboard")
     st.page_link("pages/4_Alignment_Space.py", label="Diplomatic Alignment Space")
+    st.page_link("pages/4b_Trade_Dependence_Space.py", label="Trade Dependence Space")
     st.page_link("pages/5_Methodology.py", label="Methodology & Caveats")
     st.markdown("---")
     st.caption(f"UNGA voting through {latest_year}. Trade through 2023.")

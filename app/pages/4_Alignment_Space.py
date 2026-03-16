@@ -15,11 +15,12 @@ st.set_page_config(page_title="Alignment Space", page_icon="", layout="wide")
 st.title("The Diplomatic Alignment Space")
 
 st.markdown(
-    "Each dot is a country placed on a circle according to its latent voting "
-    "direction. **Countries that vote with the same coalitions appear near each "
-    "other on the circle.** Node size reflects how strongly a country's voting "
-    "deviates from the global average. Use the slider to watch positions shift "
-    "over time."
+    "Each dot is a country placed on a circle according to its diplomatic "
+    "voting position. **Countries that vote with the same coalitions appear "
+    "near each other.** Node size reflects how distinctive a country's voting "
+    "pattern is. Use the **Color by** dropdown to overlay trade dependence "
+    "onto the diplomatic map — revealing where economic relationships diverge "
+    "from diplomatic positions."
 )
 
 # ── Load data ──
