@@ -25,3 +25,4 @@ app/__pycache__/
 app/utils/__pycache__/
 app/data/dyad_year_unga_agreement.csv
 results/scores/dyad_year_unga_agreement.csv
+.claude/
