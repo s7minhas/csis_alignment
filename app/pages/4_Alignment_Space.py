@@ -14,10 +14,11 @@ st.set_page_config(page_title="Alignment Space", page_icon="🗺️", layout="wi
 st.title("🗺️ The Diplomatic Alignment Space")
 
 st.markdown(
-    "Each dot is a country, positioned by a statistical model that finds the "
-    "underlying structure in UN General Assembly voting. **Countries that vote "
-    "with the same coalitions appear close together.** Use the slider to watch "
-    "positions shift over time."
+    "Each dot is a country placed on a circle according to its latent voting "
+    "direction. **Countries that vote with the same coalitions appear near each "
+    "other on the circle.** The distance from the center reflects how strongly "
+    "a country's voting deviates from the global average. Use the slider to "
+    "watch positions shift over time."
 )
 
 # ── Load data ──
@@ -37,24 +38,23 @@ st.plotly_chart(fig, use_container_width=True)
 # ── How to read this ──
 with st.expander("How to read this chart"):
     st.markdown("""
-**What you're looking at:** A map of diplomatic alignment based on UNGA voting.
-Each dot is a country. The closer two countries are, the more similarly they
-vote at the UN.
-
-**What the axes mean:** The two dimensions don't have inherent labels — they're
-the two main patterns the model finds in voting data. Roughly:
-- Countries on the **right** tend to vote with Western democracies
-- Countries on the **left** tend to vote with the Global South / non-aligned bloc
-- The **vertical** axis often captures secondary divisions (e.g., Middle East issues)
+**What you're looking at:** Each country's latent voting position is shown as
+a direction on a circle. The model estimates a two-dimensional vector for each
+country; the **angle** on the circle represents the direction of that vector
+(which coalition a country votes with), and the **distance from center**
+represents its magnitude (how strongly the country's voting deviates from
+the global average).
 
 **What to look for:**
-- **Clusters**: Countries that appear together vote as a bloc
-- **Movement over time**: Use the slider to see who's drifting where
-- **Outliers**: Countries far from any cluster have distinctive voting patterns
+- **Nearby countries** on the circle vote with the same coalitions
+- **Countries on opposite sides** vote with opposing coalitions
+- **Countries closer to center** have weaker or more ambiguous voting patterns
+- **Countries further from center** have distinctive, consistent voting patterns
 
-**Key pattern**: The US and Israel typically appear as outliers on one side,
-while most countries cluster toward the Global South position. This reflects
-the reality that the US frequently votes in small minorities at the UNGA.
+**Key pattern**: The US and Israel typically appear isolated from the main
+cluster. Most countries group on the opposite side, reflecting the Global
+South consensus on many UNGA issues. Use the year slider to watch how
+positions evolve.
 """)
 
 # ── Caveat ──

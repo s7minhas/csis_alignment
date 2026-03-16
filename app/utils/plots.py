@@ -215,8 +215,32 @@ def bloc_tilt_chart(bloc_df):
 
 
 def latent_space_scatter(latent_df, year, groups_df):
-    """Scatter plot of 2D latent positions for a given year."""
+    """Circular layout of latent positions for a given year.
+
+    Each country's latent vector is decomposed into direction (angle on circle)
+    and magnitude (distance from center). Countries pointing in similar directions
+    in the latent space occupy nearby positions on the circle. Magnitude reflects
+    how strongly a country's voting pattern deviates from the global mean.
+
+    This follows the circular layout from the lame package's uv_plot function.
+    """
+    import numpy as np
+
     df = latent_df[latent_df["year"] == year].copy()
+
+    # compute angle and magnitude from latent dimensions
+    df["angle"] = np.arctan2(df["dim2"].values, df["dim1"].values)
+    df["magnitude"] = np.sqrt(df["dim1"].values**2 + df["dim2"].values**2)
+
+    # rank-based radial jitter (mirrors lame uv_plot)
+    n = len(df)
+    mag_rank = df["magnitude"].rank() / (n + 1)
+    jitter = 0.15
+    radii = 1.0 + jitter * (mag_rank - 0.5)
+
+    # project onto circle with magnitude-based offset
+    df["cx"] = radii * np.cos(df["angle"].values)
+    df["cy"] = radii * np.sin(df["angle"].values)
 
     df["group_label"] = "Other"
     df.loc[df["g7"] == True, "group_label"] = "G7"
@@ -227,28 +251,40 @@ def latent_space_scatter(latent_df, year, groups_df):
                  "Global South": COLORS["global_south"], "Other": "#AAAAAA"}
 
     fig = px.scatter(
-        df, x="dim1", y="dim2",
+        df, x="cx", y="cy",
         color="group_label",
         hover_name="name_common",
-        hover_data={"dim1": ":.2f", "dim2": ":.2f", "iso3": True, "group_label": False},
+        hover_data={"cx": False, "cy": False, "iso3": True,
+                    "group_label": False, "magnitude": ":.3f"},
         color_discrete_map=color_map,
         title=f"Diplomatic Alignment Space ({year})",
-        labels={"dim1": "Dimension 1", "dim2": "Dimension 2", "group_label": "Group"},
+        labels={"group_label": "Group"},
     )
 
-    # Add labels for key countries
+    # reference circle
+    theta = np.linspace(0, 2 * np.pi, 100)
+    fig.add_trace(go.Scatter(
+        x=np.cos(theta).tolist(), y=np.sin(theta).tolist(),
+        mode="lines", line=dict(color="#DDDDDD", dash="dot", width=1),
+        showlegend=False, hoverinfo="skip",
+    ))
+
+    # labels for key countries
     key_labels = ["USA", "CHN", "RUS", "GBR", "IND", "BRA", "JPN", "KOR",
                   "SAU", "TUR", "ISR", "UKR", "CUB", "PRK", "DEU", "AUS", "ZAF"]
     for _, row in df[df["iso3"].isin(key_labels)].iterrows():
         fig.add_annotation(
-            x=row["dim1"], y=row["dim2"], text=row["iso3"],
+            x=row["cx"], y=row["cy"], text=row["iso3"],
             showarrow=False, font=dict(size=9, color="#333333"),
             yshift=12,
         )
 
     fig.update_layout(
-        height=550, margin=dict(t=50),
+        height=600, margin=dict(t=50),
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, title=""),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, title=""),
     )
-    fig.update_traces(marker=dict(size=10, opacity=0.8))
+    fig.update_yaxes(scaleanchor="x", scaleratio=1)
+    fig.update_traces(marker=dict(size=8, opacity=0.8))
     return fig
