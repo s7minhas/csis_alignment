@@ -59,9 +59,7 @@ map_metric = st.selectbox(
 )
 
 if map_metric == "Trade dependence (bilateral trade)" and "trade_US_minus_China" in anchor.columns:
-    # Use trade tilt data for the map; copy into US_minus_China so existing function works
     _trade_anchor = anchor.copy()
-    # Find latest year with trade data
     _trade_years = _trade_anchor.loc[_trade_anchor["trade_US_minus_China"].notna(), "year"]
     _trade_map_year = map_year
     if _trade_years[_trade_years <= map_year].empty:
@@ -69,7 +67,15 @@ if map_metric == "Trade dependence (bilateral trade)" and "trade_US_minus_China"
     else:
         _trade_map_year = int(_trade_years[_trade_years <= map_year].max())
     _trade_anchor["US_minus_China"] = _trade_anchor["trade_US_minus_China"]
-    st.plotly_chart(world_map_tilt(_trade_anchor, _trade_map_year), use_container_width=True)
+    fig_map = world_map_tilt(_trade_anchor, _trade_map_year)
+    fig_map.update_layout(title=f"Trade Dependence: US vs China ({_trade_map_year})")
+    fig_map.update_layout(coloraxis_colorbar=dict(
+        title="Trade balance",
+        tickvals=[-0.8, -0.4, 0, 0.4, 0.8],
+        ticktext=["← China", "", "Balanced", "", "US →"],
+    ))
+    st.plotly_chart(fig_map, use_container_width=True)
+    st.caption(f"Showing trade data for {_trade_map_year}. Color = share of trade with US minus share with China.")
 else:
     st.plotly_chart(world_map_tilt(anchor, map_year), use_container_width=True)
 

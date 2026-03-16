@@ -72,9 +72,14 @@ st.subheader(f"{selected_bloc} Member Diplomatic Alignment with US vs China")
 
 # Filter anchor data to bloc members
 bloc_anchor = anchor[anchor["country"].isin(members)].copy()
-bloc_anchor = bloc_anchor.merge(
-    actors[["iso3", "name_common"]], left_on="country", right_on="iso3", how="left"
-)
+# anchor already has name_common; only merge if missing
+if "name_common" not in bloc_anchor.columns:
+    bloc_anchor = bloc_anchor.merge(
+        actors[["iso3", "name_common"]], left_on="country", right_on="iso3", how="left"
+    )
+elif "name_common_x" in bloc_anchor.columns:
+    bloc_anchor = bloc_anchor.rename(columns={"name_common_x": "name_common"})
+    bloc_anchor = bloc_anchor.drop(columns=["name_common_y"], errors="ignore")
 
 # Small multiples: tilt trajectory for each member
 fig = go.Figure()
