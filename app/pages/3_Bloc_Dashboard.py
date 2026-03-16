@@ -105,22 +105,30 @@ snap_cols = ["name_common", "country", "alignment_with_US", "alignment_with_Chin
 has_g7_brics = "alignment_with_G7" in bloc_anchor.columns
 if has_g7_brics:
     snap_cols.extend(["alignment_with_G7", "alignment_with_BRICS", "G7_minus_BRICS"])
+# Add trade if available
+has_trade = "trade_share_US" in bloc_anchor.columns
+if has_trade:
+    snap_cols.extend(["trade_share_US", "trade_share_China", "trade_US_minus_China"])
 
 snapshot = bloc_anchor[bloc_anchor["year"] == latest_year][snap_cols].sort_values(
     "US_minus_China", ascending=False
 ).reset_index(drop=True)
 
 col_names = {"name_common": "Country", "country": "ISO3",
-             "alignment_with_US": "Align. with US", "alignment_with_China": "Align. with China",
-             "US_minus_China": "US-China Tilt",
-             "alignment_with_G7": "Align. with G7", "alignment_with_BRICS": "Align. with BRICS",
-             "G7_minus_BRICS": "G7-BRICS Tilt"}
+             "alignment_with_US": "Diplo. with US", "alignment_with_China": "Diplo. with China",
+             "US_minus_China": "Diplo. Tilt",
+             "alignment_with_G7": "Diplo. with G7", "alignment_with_BRICS": "Diplo. with BRICS",
+             "G7_minus_BRICS": "G7-BRICS Tilt",
+             "trade_share_US": "Trade w/ US", "trade_share_China": "Trade w/ China",
+             "trade_US_minus_China": "Trade Tilt"}
 snapshot = snapshot.rename(columns=col_names)
 snapshot.index = snapshot.index + 1
 
-fmt = {"Align. with US": "{:.3f}", "Align. with China": "{:.3f}", "US-China Tilt": "{:+.3f}"}
+fmt = {"Diplo. with US": "{:.3f}", "Diplo. with China": "{:.3f}", "Diplo. Tilt": "{:+.3f}"}
 if has_g7_brics:
-    fmt.update({"Align. with G7": "{:.3f}", "Align. with BRICS": "{:.3f}", "G7-BRICS Tilt": "{:+.3f}"})
+    fmt.update({"Diplo. with G7": "{:.3f}", "Diplo. with BRICS": "{:.3f}", "G7-BRICS Tilt": "{:+.3f}"})
+if has_trade:
+    fmt.update({"Trade w/ US": "{:.1%}", "Trade w/ China": "{:.1%}", "Trade Tilt": "{:+.1%}"})
 
 st.dataframe(
     snapshot.style.format(fmt).background_gradient(
