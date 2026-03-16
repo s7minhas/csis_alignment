@@ -45,14 +45,33 @@ with st.sidebar:
     st.page_link("pages/1_Country_Explorer.py", label="🔍 Country Explorer")
     st.page_link("pages/2_Dyad_Comparison.py", label="↔️ Compare Two Countries")
     st.page_link("pages/3_Bloc_Dashboard.py", label="🏛️ Bloc Dashboard")
-    st.page_link("pages/4_Alignment_Space.py", label="🗺️ Alignment Space")
+    st.page_link("pages/4_Alignment_Space.py", label="🗺️ Diplomatic Alignment Space")
     st.page_link("pages/5_Methodology.py", label="📖 Methodology & Caveats")
     st.markdown("---")
     st.caption(f"Data through {latest_year} UNGA session.")
     st.caption("Minhas (MSU) × CSIS")
 
 # ── World Map ──
-st.plotly_chart(world_map_tilt(anchor, map_year), use_container_width=True)
+map_metric = st.selectbox(
+    "Map metric",
+    ["Diplomatic alignment (UNGA voting)", "Trade dependence (bilateral trade)"],
+    index=0,
+)
+
+if map_metric == "Trade dependence (bilateral trade)" and "trade_US_minus_China" in anchor.columns:
+    # Use trade tilt data for the map; copy into US_minus_China so existing function works
+    _trade_anchor = anchor.copy()
+    # Find latest year with trade data
+    _trade_years = _trade_anchor.loc[_trade_anchor["trade_US_minus_China"].notna(), "year"]
+    _trade_map_year = map_year
+    if _trade_years[_trade_years <= map_year].empty:
+        _trade_map_year = int(_trade_years.max()) if len(_trade_years) > 0 else map_year
+    else:
+        _trade_map_year = int(_trade_years[_trade_years <= map_year].max())
+    _trade_anchor["US_minus_China"] = _trade_anchor["trade_US_minus_China"]
+    st.plotly_chart(world_map_tilt(_trade_anchor, _trade_map_year), use_container_width=True)
+else:
+    st.plotly_chart(world_map_tilt(anchor, map_year), use_container_width=True)
 
 # ── Headline metrics ──
 col1, col2, col3, col4 = st.columns(4)
@@ -107,8 +126,8 @@ if "trade_share_US" in anchor.columns:
     st.markdown("---")
     st.plotly_chart(diplomacy_vs_trade_scatter(anchor, latest_year), use_container_width=True)
     st.caption(
-        "Countries on the dashed diagonal are consistent — their diplomatic positions "
-        "and trade patterns point the same direction. Countries off the diagonal show "
+        "Countries on the dashed diagonal are consistent — their diplomatic alignment "
+        "and trade dependence point the same direction. Countries off the diagonal show "
         "a divergence: they vote one way at the UNGA but trade in the other direction. "
         "Trade data from IMF Direction of Trade Statistics and World Bank WITS."
     )
@@ -150,21 +169,21 @@ takeaways = []
 if brics_early and brics_late and g7_late:
     takeaways.append(
         f"**BRICS is converging on G7-level diplomatic cohesion.** "
-        f"BRICS within-group alignment rose from {brics_early:.2f} ({min_year}) to "
+        f"BRICS within-group diplomatic alignment rose from {brics_early:.2f} ({min_year}) to "
         f"{brics_late:.2f} ({latest_year}), nearly matching G7's {g7_late:.2f}."
     )
 
 if cnrus_early and cnrus_late and usgbr_late:
     takeaways.append(
         f"**China-Russia diplomatic convergence has been steady.** "
-        f"Their alignment score rose from {cnrus_early:.2f} ({min_year}) to "
+        f"Their diplomatic alignment score rose from {cnrus_early:.2f} ({min_year}) to "
         f"{cnrus_late:.2f} ({latest_year}), approaching the US-UK level of {usgbr_late:.2f}."
     )
 
 if kor_us_early and kor_us_late:
     takeaways.append(
         f"**South Korea is one of the biggest movers toward US positions** — "
-        f"alignment with the US rose from {kor_us_early:.2f} ({min_year}) to "
+        f"diplomatic alignment with the US rose from {kor_us_early:.2f} ({min_year}) to "
         f"{kor_us_late:.2f} ({latest_year})."
     )
 
