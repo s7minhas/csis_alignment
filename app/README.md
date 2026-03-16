@@ -1,8 +1,8 @@
 # Dynamic Alignment Observatory
 
-**Who votes with whom — and how that's changing.**
+**Mapping diplomatic alignment and trade dependence across the international system.**
 
-Interactive dashboard tracking diplomatic alignment across 193 countries using UN General Assembly voting patterns (1990–2024).
+Interactive dashboard tracking diplomatic alignment (UNGA voting) and trade dependence (bilateral trade flows) across 193 countries (1990–2024).
 
 Developed by [Shahryar Minhas](https://s7minhas.com) (Michigan State University) in collaboration with the [Center for Strategic and International Studies (CSIS)](https://www.csis.org).
 

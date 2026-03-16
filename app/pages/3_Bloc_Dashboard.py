@@ -16,8 +16,8 @@ from utils.plots import (
 )
 from utils.text import CAVEAT_BOX
 
-st.set_page_config(page_title="Bloc Dashboard", page_icon="🏛️", layout="wide")
-st.title("🏛️ Bloc Dashboard")
+st.set_page_config(page_title="Bloc Dashboard", page_icon="", layout="wide")
+st.title("Bloc Dashboard")
 
 # ── Load data ──
 anchor = load_anchor_scores()
@@ -94,9 +94,9 @@ for iso3 in sorted(members):
 
 fig.add_hline(y=0, line_dash="dash", line_color="#999999")
 fig.update_layout(
-    title=f"{selected_bloc} Members: US-China Tilt Over Time",
+    title=f"{selected_bloc} Members: Voting Closer to US or China?",
     xaxis_title=None,
-    yaxis_title="← China · US →",
+    yaxis_title="← Votes more like China · Votes more like US →",
     height=500,
     legend=dict(orientation="h", yanchor="top", y=-0.1, font=dict(size=10)),
     hovermode="x unified",
@@ -142,5 +142,5 @@ st.dataframe(
 )
 
 # ── Caveat ──
-with st.expander("⚠️ Important caveats"):
+with st.expander("Important caveats"):
     st.markdown(CAVEAT_BOX)

@@ -264,7 +264,7 @@ def tilt_trajectory(anchor_df, iso3, country_name):
     fig.update_layout(
         title=title,
         xaxis_title=None,
-        yaxis_title="← China · US →",
+        yaxis_title="← Votes more like China · Votes more like US →",
         legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
         height=420, margin=dict(t=90),
         hovermode="x unified",
@@ -342,7 +342,7 @@ def bloc_tilt_chart(bloc_df):
     fig.update_layout(
         title="Bloc-Level US vs China Tilt",
         xaxis_title=None,
-        yaxis_title="← China · US →",
+        yaxis_title="← Votes more like China · Votes more like US →",
         legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
         height=400, margin=dict(t=90),
         hovermode="x unified",

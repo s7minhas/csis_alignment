@@ -14,8 +14,8 @@ from utils.data_loader import (
 from utils.plots import country_trajectory, tilt_trajectory, COLORS
 from utils.text import CAVEAT_BOX, format_alignment_description, format_tilt_description
 
-st.set_page_config(page_title="Country Explorer", page_icon="🔍", layout="wide")
-st.title("🔍 Country Explorer")
+st.set_page_config(page_title="Country Explorer", page_icon="", layout="wide")
+st.title("Country Explorer")
 
 # ── Load data ──
 anchor = load_anchor_scores()
@@ -86,21 +86,28 @@ st.markdown(f"## {selected_name}")
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Diplomatic Alignment with US", f"{latest['alignment_with_US']:.2f}",
-            help="0 = very distant, 1 = very close to US diplomatic positions")
+            help="How similarly this country votes with the US at the UNGA. "
+                 "0 = votes very differently, 1 = votes almost identically.")
 col2.metric("Diplomatic Alignment with China", f"{latest['alignment_with_China']:.2f}",
-            help="0 = very distant, 1 = very close to China's diplomatic positions")
+            help="How similarly this country votes with China at the UNGA. "
+                 "0 = votes very differently, 1 = votes almost identically.")
 col3.metric("US-China Tilt", f"{latest['US_minus_China']:+.2f}",
-            help="Positive = closer to US, negative = closer to China")
+            help="The difference between alignment with the US and alignment with China. "
+                 "Positive = votes more like the US, negative = votes more like China, "
+                 "zero = equidistant.")
 
 col4, col5, col6 = st.columns(3)
 col4.metric("Diplomatic Alignment with G7", f"{latest['alignment_with_G7']:.2f}",
-            help="Mean diplomatic alignment with G7 members (0–1)")
+            help="Average voting similarity with G7 members (0–1). "
+                 "Higher = votes more similarly to the G7 bloc as a whole.")
 col5.metric("Diplomatic Alignment with BRICS", f"{latest['alignment_with_BRICS']:.2f}",
-            help="Mean diplomatic alignment with BRICS members (0–1)")
+            help="Average voting similarity with BRICS members (0–1). "
+                 "Higher = votes more similarly to the BRICS bloc as a whole.")
 g7_brics_tilt = latest.get("G7_minus_BRICS", None)
 if g7_brics_tilt is not None and pd.notna(g7_brics_tilt):
     col6.metric("G7-BRICS Tilt", f"{g7_brics_tilt:+.2f}",
-                help="Positive = closer to G7, negative = closer to BRICS")
+                help="The difference between alignment with G7 and alignment with BRICS. "
+                     "Positive = votes more like G7, negative = votes more like BRICS.")
 
 # Trade dependence (if available — trade data covers 1990-2023)
 # For 2024 the latest trade year is 2023, so look back one year if needed
@@ -117,23 +124,30 @@ if has_trade:
     st.markdown("#### Trade Dependence")
     col7, col8, col9 = st.columns(3)
     col7.metric("Trade with US", f"{_trade_row['trade_share_US']:.1%}",
-                help="Share of total bilateral trade with the US")
+                help="What percentage of this country's total trade (exports + imports) "
+                     "is with the United States.")
     col8.metric("Trade with China", f"{_trade_row['trade_share_China']:.1%}",
-                help="Share of total bilateral trade with China")
+                help="What percentage of this country's total trade (exports + imports) "
+                     "is with China.")
     trade_tilt = _trade_row.get("trade_US_minus_China", None)
     if trade_tilt is not None and pd.notna(trade_tilt):
         col9.metric("Trade US-China Balance", f"{trade_tilt:+.1%}",
-                    help="Positive = trades more with US, negative = more with China")
+                    help="US trade share minus China trade share. Positive = trades more "
+                         "with the US, negative = trades more with China.")
 
     col10, col11, col12 = st.columns(3)
     col10.metric("Trade with G7", f"{_trade_row.get('trade_share_G7', 0):.1%}",
-                 help="Share of total trade with G7 countries")
+                 help="What percentage of this country's total trade is with "
+                      "G7 countries (US, UK, France, Germany, Italy, Japan, Canada).")
     col11.metric("Trade with BRICS", f"{_trade_row.get('trade_share_BRICS', 0):.1%}",
-                 help="Share of total trade with BRICS countries")
+                 help="What percentage of this country's total trade is with "
+                      "BRICS countries (Brazil, Russia, India, China, South Africa).")
     g7b_trade = _trade_row.get("trade_G7_minus_BRICS", None)
     if g7b_trade is not None and pd.notna(g7b_trade):
         col12.metric("Trade G7-BRICS Balance", f"{g7b_trade:+.1%}",
-                     help="Positive = trades more with G7, negative = more with BRICS")
+                     help="G7 trade share minus BRICS trade share. Positive = "
+                          "trades more with the G7 bloc, negative = trades more "
+                          "with the BRICS bloc.")
 
 tilt_desc = format_tilt_description(latest["US_minus_China"])
 st.markdown(f"**{latest_year} assessment:** {tilt_desc}")
@@ -243,5 +257,5 @@ if memberships:
     st.markdown(f"**Group memberships:** {' · '.join(memberships)}")
 
 # ── Caveat ──
-with st.expander("⚠️ Important caveats"):
+with st.expander("Important caveats"):
     st.markdown(CAVEAT_BOX)

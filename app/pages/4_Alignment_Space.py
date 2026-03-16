@@ -11,8 +11,8 @@ from utils.data_loader import load_latent_positions, load_group_membership, load
 from utils.plots import latent_space_scatter
 from utils.text import CAVEAT_BOX
 
-st.set_page_config(page_title="Alignment Space", page_icon="🗺️", layout="wide")
-st.title("🗺️ The Diplomatic Alignment Space")
+st.set_page_config(page_title="Alignment Space", page_icon="", layout="wide")
+st.title("The Diplomatic Alignment Space")
 
 st.markdown(
     "Each dot is a country placed on a circle according to its latent voting "
@@ -153,15 +153,15 @@ country; the **angle** on the circle represents the direction of that vector
 
 **Color modes:**
 - **Bloc membership**: Countries colored by G7, BRICS, Global South, or Other
-- **Trade US-China tilt**: Blue = trades more with US, red = trades more with China. Shows where economic relationships sit relative to diplomatic positions.
-- **Diplomacy-trade gap**: Blue = diplomatically closer to US than trade suggests, red = diplomatically closer to China than trade suggests. Countries in white are consistent; colored countries show divergence.
+- **Trade dependence (US vs China)**: Blue = larger share of trade with the US, red = larger share with China. This overlays economic relationships onto the diplomatic map — look for countries whose trade color doesn't match their diplomatic position.
+- **Diplomacy vs trade gap**: Blue = this country votes more like the US than its trade would suggest, red = votes more like China than its trade would suggest. White countries are consistent across both dimensions.
 
 **What to look for:**
 - **Nearby countries** on the circle vote with the same coalitions
 - **Countries on opposite sides** vote with opposing coalitions
-- In trade-colored mode: a **red dot on the US side** of the circle means a country votes with the US but trades with China (e.g., Australia)
+- In trade-colored mode: a **red dot on the US side** of the circle means a country votes with the US but trades more with China (e.g., Australia, South Korea)
 """)
 
 # ── Caveat ──
-with st.expander("⚠️ Important caveats"):
+with st.expander("Important caveats"):
     st.markdown(CAVEAT_BOX)

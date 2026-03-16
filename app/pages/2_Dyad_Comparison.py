@@ -12,8 +12,8 @@ from utils.data_loader import (
 from utils.plots import dyad_trajectory
 from utils.text import CAVEAT_BOX, format_alignment_description
 
-st.set_page_config(page_title="Compare Countries", page_icon="↔️", layout="wide")
-st.title("↔️ Compare Two Countries")
+st.set_page_config(page_title="Compare Countries", page_icon="", layout="wide")
+st.title("Compare Two Countries")
 
 # ── Load data ──
 dyad = load_dyad_scores()
@@ -67,13 +67,15 @@ col_a, col_b, col_c = st.columns(3)
 col_a.metric(
     f"Diplomatic Alignment ({int(latest['year'])})",
     f"{latest['structural_alignment']:.3f}",
-    help="0 = very distant, 1 = perfectly aligned",
+    help="How similarly these two countries vote at the UNGA. "
+         "0 = vote very differently, 1 = vote almost identically.",
 )
 delta = latest["structural_alignment"] - earliest["structural_alignment"]
 col_b.metric(
     f"Change since {int(earliest['year'])}",
     f"{delta:+.3f}",
-    help="Positive = converging, negative = diverging",
+    help="Positive = these countries are voting more similarly over time, "
+         "negative = voting more differently.",
 )
 col_c.markdown(
     f"**Assessment:** {format_alignment_description(latest['structural_alignment'])}"
@@ -120,11 +122,11 @@ with st.expander("Show year-by-year data"):
     )
 
 # ── Caveat ──
-with st.expander("⚠️ Important caveats"):
+with st.expander("Important caveats"):
     st.markdown(CAVEAT_BOX)
     st.markdown(
-        "**Reminder:** This score is based on UN General Assembly voting. "
-        "It captures diplomatic position-taking, not the full bilateral "
-        "relationship. Trade, military cooperation, intelligence sharing, "
-        "and personal diplomacy are not reflected here."
+        "**Reminder:** This score is based on UN General Assembly voting "
+        "and captures diplomatic position-taking. Trade dependence data is "
+        "available in the Country Explorer. Military cooperation, intelligence "
+        "sharing, and other channels are not reflected here."
     )

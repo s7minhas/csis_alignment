@@ -1,6 +1,6 @@
 """
 Dynamic Alignment Observatory
-Who votes with whom — and how that's changing.
+Mapping diplomatic alignment and trade dependence across the international system.
 """
 
 import streamlit as st
@@ -16,7 +16,7 @@ from utils.text import CAVEAT_BOX
 
 st.set_page_config(
     page_title="Dynamic Alignment Observatory",
-    page_icon="🌐",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -29,11 +29,12 @@ latest_year = int(anchor["year"].max())
 
 # ── Header ──
 st.title("Dynamic Alignment Observatory")
-st.markdown("**Who votes with whom — and how that's changing.**")
+st.markdown("**Mapping diplomatic alignment and trade dependence across the international system.**")
 n_countries = anchor["country"].nunique() + 2  # +2 for USA and CHN (anchor states)
 st.markdown(
-    f"*Tracking diplomatic alignment across {n_countries} countries using "
-    f"UN General Assembly voting patterns ({int(anchor['year'].min())}–{latest_year}).*"
+    f"*{n_countries} countries, {int(anchor['year'].min())}–{latest_year}. "
+    f"Diplomatic alignment from UN General Assembly voting. "
+    f"Trade dependence from bilateral trade flows (IMF/WITS).*"
 )
 
 # ── Sidebar ──
@@ -42,13 +43,13 @@ with st.sidebar:
     map_year = st.slider("Map year", int(anchor["year"].min()), latest_year, latest_year)
     st.markdown("---")
     st.markdown("**Navigate**")
-    st.page_link("pages/1_Country_Explorer.py", label="🔍 Country Explorer")
-    st.page_link("pages/2_Dyad_Comparison.py", label="↔️ Compare Two Countries")
-    st.page_link("pages/3_Bloc_Dashboard.py", label="🏛️ Bloc Dashboard")
-    st.page_link("pages/4_Alignment_Space.py", label="🗺️ Diplomatic Alignment Space")
-    st.page_link("pages/5_Methodology.py", label="📖 Methodology & Caveats")
+    st.page_link("pages/1_Country_Explorer.py", label="Country Explorer")
+    st.page_link("pages/2_Dyad_Comparison.py", label="Compare Two Countries")
+    st.page_link("pages/3_Bloc_Dashboard.py", label="Bloc Dashboard")
+    st.page_link("pages/4_Alignment_Space.py", label="Diplomatic Alignment Space")
+    st.page_link("pages/5_Methodology.py", label="Methodology & Caveats")
     st.markdown("---")
-    st.caption(f"Data through {latest_year} UNGA session.")
+    st.caption(f"UNGA voting through {latest_year}. Trade through 2023.")
     st.caption("Minhas (MSU) × CSIS")
 
 # ── World Map ──
@@ -104,19 +105,21 @@ for col, bloc_name in zip([col1, col2, col3, col4], ["G7", "BRICS", "NATO", "Glo
             f"{bloc_name} Cohesion",
             f"{val:.2f}",
             f"{delta:+.3f} vs 5yr ago" if delta is not None else None,
-            help=f"Mean pairwise diplomatic alignment among {bloc_name} members (0–1 scale). "
-                 f"Higher = members vote more similarly at the UNGA.",
+            help=f"Cohesion measures how similarly {bloc_name} members vote at the UNGA. "
+                 f"Ranges from 0 (members vote very differently from each other) to 1 "
+                 f"(members vote identically). Higher values mean the bloc acts as a "
+                 f"more unified diplomatic group.",
         )
 
 # ── Caveat ──
-with st.expander("⚠️ What this measures — read before exploring", expanded=False):
+with st.expander("What this measures — read before exploring", expanded=False):
     st.markdown(CAVEAT_BOX)
     st.markdown(
-        "**Note on the map colors:** Most countries appear red (China-tilted) because "
-        "the US frequently votes in small minorities at the UNGA. This doesn't mean "
-        "most countries are Chinese allies — it means their diplomatic *positions* on "
-        "UN issues differ from the US more than from China. The map is most informative "
-        "for comparing *relative* positions and tracking *changes* over time."
+        "**Note on the map colors:** Most countries appear red because "
+        "the US frequently votes in small minorities at the UNGA, placing most "
+        "countries closer to Chinese positions than to American ones. This does "
+        "not mean most countries are Chinese allies. The map is most informative "
+        "for comparing countries to each other and tracking changes over time."
     )
 
 # ── Bloc charts ──
@@ -174,23 +177,24 @@ takeaways = []
 
 if brics_early and brics_late and g7_late:
     takeaways.append(
-        f"**BRICS is converging on G7-level diplomatic cohesion.** "
-        f"BRICS within-group diplomatic alignment rose from {brics_early:.2f} ({min_year}) to "
-        f"{brics_late:.2f} ({latest_year}), nearly matching G7's {g7_late:.2f}."
+        f"**BRICS members now vote nearly as similarly as G7 members.** "
+        f"Average diplomatic alignment among BRICS members rose from {brics_early:.2f} ({min_year}) to "
+        f"{brics_late:.2f} ({latest_year}), approaching G7's {g7_late:.2f}. (1.0 would mean the bloc "
+        f"votes identically on every issue.)"
     )
 
 if cnrus_early and cnrus_late and usgbr_late:
     takeaways.append(
-        f"**China-Russia diplomatic convergence has been steady.** "
-        f"Their diplomatic alignment score rose from {cnrus_early:.2f} ({min_year}) to "
+        f"**China and Russia have been voting more similarly for three decades.** "
+        f"Their diplomatic alignment rose from {cnrus_early:.2f} ({min_year}) to "
         f"{cnrus_late:.2f} ({latest_year}), approaching the US-UK level of {usgbr_late:.2f}."
     )
 
 if kor_us_early and kor_us_late:
     takeaways.append(
-        f"**South Korea is one of the biggest movers toward US positions** — "
-        f"diplomatic alignment with the US rose from {kor_us_early:.2f} ({min_year}) to "
-        f"{kor_us_late:.2f} ({latest_year})."
+        f"**South Korea has moved steadily toward US diplomatic positions** — "
+        f"its alignment score with the US rose from {kor_us_early:.2f} ({min_year}) to "
+        f"{kor_us_late:.2f} ({latest_year}), one of the largest sustained shifts in the dataset."
     )
 
 ukr_tilt_2000 = _get_tilt("UKR", 2000)
@@ -201,9 +205,10 @@ if ukr_tilt_2000 is not None and ukr_tilt_latest is not None and kaz_tilt_2000 i
     ukr_shift = ukr_tilt_latest - ukr_tilt_2000
     kaz_shift = kaz_tilt_latest - kaz_tilt_2000
     takeaways.append(
-        f"**Ukraine and Kazakhstan are mirror-image movers.** "
-        f"Ukraine shifted {ukr_shift:+.2f} toward the US since 2000; Kazakhstan shifted "
-        f"{kaz_shift:+.2f} toward China over the same period."
+        f"**Ukraine and Kazakhstan moved in opposite directions.** "
+        f"Since 2000, Ukraine's voting moved {ukr_shift:+.2f} toward US positions while "
+        f"Kazakhstan moved {kaz_shift:+.2f} toward Chinese positions — nearly equal shifts "
+        f"in opposite directions."
     )
 
 takeaways.append(

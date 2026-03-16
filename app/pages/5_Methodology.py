@@ -8,8 +8,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils.text import METHODOLOGY_FULL, ABOUT_TEXT, CAVEAT_BOX
 
-st.set_page_config(page_title="Methodology", page_icon="📖", layout="wide")
-st.title("📖 Methodology & Caveats")
+st.set_page_config(page_title="Methodology", page_icon="", layout="wide")
+st.title("Methodology & Caveats")
 
 st.markdown(CAVEAT_BOX)
 
