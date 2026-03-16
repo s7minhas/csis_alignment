@@ -41,7 +41,7 @@ dbn_pilot = dbn(
 	data = Y_pilot,
 	model = 'dynamic',
 	family = 'gaussian',
-	symmetric = FALSE,   # symmetric=TRUE has a bug in current dbn version
+	symmetric = FALSE,   # use asymmetric specification for flexibility
 	nscan = 10000,
 	burn = 2000,
 	odens = 10,
