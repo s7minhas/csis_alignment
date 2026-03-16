@@ -68,7 +68,7 @@ with col_right:
 
 # ── Individual member trajectories ──
 st.markdown("---")
-st.subheader(f"{selected_bloc} Member Alignment with US vs China")
+st.subheader(f"{selected_bloc} Member Diplomatic Alignment with US vs China")
 
 # Filter anchor data to bloc members
 bloc_anchor = anchor[anchor["country"].isin(members)].copy()
@@ -99,7 +99,7 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # ── Snapshot table ──
-st.markdown(f"### {selected_bloc} Alignment Snapshot ({latest_year})")
+st.markdown(f"### {selected_bloc} Diplomatic Alignment & Trade Dependence Snapshot ({latest_year})")
 snap_cols = ["name_common", "country", "alignment_with_US", "alignment_with_China", "US_minus_China"]
 # Add G7/BRICS alignment if columns exist
 has_g7_brics = "alignment_with_G7" in bloc_anchor.columns
@@ -132,7 +132,7 @@ if has_trade:
 
 st.dataframe(
     snapshot.style.format(fmt).background_gradient(
-        subset=["US-China Tilt"], cmap="RdBu", vmin=-1, vmax=1),
+        subset=["Diplo. Tilt"], cmap="RdBu", vmin=-1, vmax=1),
     use_container_width=True,
 )
 
