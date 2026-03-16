@@ -176,25 +176,29 @@ kor_us_late = _get_dyad_alignment("USA", "KOR", latest_year)
 takeaways = []
 
 if brics_early and brics_late and g7_late:
+    brics_direction = "rose" if brics_late > brics_early else "fell"
+    gap = abs(g7_late - brics_late)
     takeaways.append(
-        f"**BRICS members now vote nearly as similarly as G7 members.** "
-        f"Average diplomatic alignment among BRICS members rose from {brics_early:.2f} ({min_year}) to "
-        f"{brics_late:.2f} ({latest_year}), approaching G7's {g7_late:.2f}. (1.0 would mean the bloc "
-        f"votes identically on every issue.)"
+        f"**BRICS and G7 diplomatic cohesion compared.** "
+        f"Average diplomatic alignment among BRICS members {brics_direction} from "
+        f"{brics_early:.2f} ({min_year}) to {brics_late:.2f} ({latest_year}). "
+        f"G7 cohesion stands at {g7_late:.2f}. The gap between the two blocs is {gap:.2f}. "
+        f"(1.0 would mean the bloc votes identically on every issue.)"
     )
 
 if cnrus_early and cnrus_late and usgbr_late:
+    cnrus_direction = "rose" if cnrus_late > cnrus_early else "fell"
     takeaways.append(
-        f"**China and Russia have been voting more similarly for three decades.** "
-        f"Their diplomatic alignment rose from {cnrus_early:.2f} ({min_year}) to "
-        f"{cnrus_late:.2f} ({latest_year}), approaching the US-UK level of {usgbr_late:.2f}."
+        f"**China-Russia diplomatic alignment {cnrus_direction}** "
+        f"from {cnrus_early:.2f} ({min_year}) to {cnrus_late:.2f} ({latest_year}). "
+        f"For comparison, US-UK alignment is {usgbr_late:.2f}."
     )
 
 if kor_us_early and kor_us_late:
+    kor_direction = "rose" if kor_us_late > kor_us_early else "fell"
     takeaways.append(
-        f"**South Korea has moved steadily toward US diplomatic positions** — "
-        f"its alignment score with the US rose from {kor_us_early:.2f} ({min_year}) to "
-        f"{kor_us_late:.2f} ({latest_year}), one of the largest sustained shifts in the dataset."
+        f"**South Korea's diplomatic alignment with the US {kor_direction}** "
+        f"from {kor_us_early:.2f} ({min_year}) to {kor_us_late:.2f} ({latest_year})."
     )
 
 ukr_tilt_2000 = _get_tilt("UKR", 2000)
