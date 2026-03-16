@@ -1,0 +1,195 @@
+iso3,cow_code,name_common,un_code,is_un_member,region_un,region_wb,continent,is_anchor
+AFG,700,Afghanistan,4,TRUE,Asia,South Asia,Asia,FALSE
+AGO,540,Angola,24,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+ALB,339,Albania,8,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+AND,232,Andorra,20,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+ARE,696,United Arab Emirates,784,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+ARG,160,Argentina,32,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+ARM,371,Armenia,51,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+ATG,58,Antigua & Barbuda,28,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+AUS,900,Australia,36,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+AUT,305,Austria,40,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+AZE,373,Azerbaijan,31,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+BDI,516,Burundi,108,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+BEL,211,Belgium,56,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+BEN,434,Benin,204,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+BFA,439,Burkina Faso,854,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+BGD,771,Bangladesh,50,TRUE,Asia,South Asia,Asia,FALSE
+BGR,355,Bulgaria,100,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+BHR,692,Bahrain,48,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+BHS,31,Bahamas,44,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+BIH,346,Bosnia & Herzegovina,70,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+BLR,370,Belarus,112,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+BLZ,80,Belize,84,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+BOL,145,Bolivia,68,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+BRA,140,Brazil,76,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+BRB,53,Barbados,52,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+BRN,835,Brunei,96,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+BTN,760,Bhutan,64,TRUE,Asia,South Asia,Asia,FALSE
+BWA,571,Botswana,72,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+CAF,482,Central African Republic,140,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+CAN,20,Canada,124,TRUE,Americas,North America,Americas,FALSE
+CHE,225,Switzerland,756,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+CHL,155,Chile,152,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+CHN,710,China,156,TRUE,Asia,East Asia & Pacific,Asia,TRUE
+CIV,437,Côte d’Ivoire,384,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+CMR,471,Cameroon,120,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+COD,490,Congo - Kinshasa,180,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+COG,484,Congo - Brazzaville,178,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+COL,100,Colombia,170,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+COM,581,Comoros,174,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+CPV,402,Cape Verde,132,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+CRI,94,Costa Rica,188,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+CUB,40,Cuba,192,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+CYP,352,Cyprus,196,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+CZE,316,Czechia,203,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+DEU,255,Germany,276,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+DJI,522,Djibouti,262,TRUE,Africa,Middle East & North Africa,Africa,FALSE
+DMA,54,Dominica,212,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+DNK,390,Denmark,208,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+DOM,42,Dominican Republic,214,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+DZA,615,Algeria,12,TRUE,Africa,Middle East & North Africa,Africa,FALSE
+ECU,130,Ecuador,218,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+EGY,651,Egypt,818,TRUE,Africa,Middle East & North Africa,Africa,FALSE
+ERI,531,Eritrea,232,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+ESP,230,Spain,724,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+EST,366,Estonia,233,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+ETH,530,Ethiopia,231,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+FIN,375,Finland,246,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+FJI,950,Fiji,242,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+FRA,220,France,250,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+FSM,987,Micronesia (Federated States of),583,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+GAB,481,Gabon,266,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+GBR,200,United Kingdom,826,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+GEO,372,Georgia,268,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+GHA,452,Ghana,288,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+GIN,438,Guinea,324,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+GMB,420,Gambia,270,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+GNB,404,Guinea-Bissau,624,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+GNQ,411,Equatorial Guinea,226,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+GRC,350,Greece,300,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+GRD,55,Grenada,308,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+GTM,90,Guatemala,320,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+GUY,110,Guyana,328,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+HND,91,Honduras,340,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+HRV,344,Croatia,191,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+HTI,41,Haiti,332,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+HUN,310,Hungary,348,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+IDN,850,Indonesia,360,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+IND,750,India,356,TRUE,Asia,South Asia,Asia,FALSE
+IRL,205,Ireland,372,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+IRN,630,Iran,364,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+IRQ,645,Iraq,368,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+ISL,395,Iceland,352,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+ISR,666,Israel,376,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+ITA,325,Italy,380,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+JAM,51,Jamaica,388,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+JOR,663,Jordan,400,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+JPN,740,Japan,392,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+KAZ,705,Kazakhstan,398,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+KEN,501,Kenya,404,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+KGZ,703,Kyrgyzstan,417,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+KHM,811,Cambodia,116,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+KIR,946,Kiribati,296,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+KNA,60,St. Kitts & Nevis,659,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+KOR,732,South Korea,410,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+KWT,690,Kuwait,414,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+LAO,812,Laos,418,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+LBN,660,Lebanon,422,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+LBR,450,Liberia,430,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+LBY,620,Libya,434,TRUE,Africa,Middle East & North Africa,Africa,FALSE
+LCA,56,St. Lucia,662,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+LIE,223,Liechtenstein,438,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+LKA,780,Sri Lanka,144,TRUE,Asia,South Asia,Asia,FALSE
+LSO,570,Lesotho,426,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+LTU,368,Lithuania,440,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+LUX,212,Luxembourg,442,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+LVA,367,Latvia,428,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+MAR,600,Morocco,504,TRUE,Africa,Middle East & North Africa,Africa,FALSE
+MCO,221,Monaco,492,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+MDA,359,Moldova,498,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+MDG,580,Madagascar,450,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+MDV,781,Maldives,462,TRUE,Asia,South Asia,Asia,FALSE
+MEX,70,Mexico,484,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+MHL,983,Marshall Islands,584,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+MKD,343,North Macedonia,807,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+MLI,432,Mali,466,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+MLT,338,Malta,470,TRUE,Europe,Middle East & North Africa,Europe,FALSE
+MMR,775,Myanmar (Burma),104,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+MNE,341,Montenegro,499,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+MNG,712,Mongolia,496,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+MOZ,541,Mozambique,508,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+MRT,435,Mauritania,478,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+MUS,590,Mauritius,480,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+MWI,553,Malawi,454,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+MYS,820,Malaysia,458,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+NAM,565,Namibia,516,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+NER,436,Niger,562,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+NGA,475,Nigeria,566,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+NIC,93,Nicaragua,558,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+NLD,210,Netherlands,528,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+NOR,385,Norway,578,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+NPL,790,Nepal,524,TRUE,Asia,South Asia,Asia,FALSE
+NRU,970,Nauru,520,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+NZL,920,New Zealand,554,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+OMN,698,Oman,512,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+PAK,770,Pakistan,586,TRUE,Asia,South Asia,Asia,FALSE
+PAN,95,Panama,591,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+PER,135,Peru,604,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+PHL,840,Philippines,608,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+PLW,986,Palau,585,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+PNG,910,Papua New Guinea,598,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+POL,290,Poland,616,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+PRK,731,North Korea,408,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+PRT,235,Portugal,620,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+PRY,150,Paraguay,600,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+QAT,694,Qatar,634,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+ROU,360,Romania,642,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+RUS,365,Russia,643,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+RWA,517,Rwanda,646,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SAU,670,Saudi Arabia,682,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+SDN,625,Sudan,729,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SEN,433,Senegal,686,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SGP,830,Singapore,702,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+SLB,940,Solomon Islands,90,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+SLE,451,Sierra Leone,694,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SLV,92,El Salvador,222,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+SMR,331,San Marino,674,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+SOM,520,Somalia,706,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SSD,626,South Sudan,728,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+STP,403,São Tomé & Príncipe,678,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SUR,115,Suriname,740,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+SVK,317,Slovakia,703,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+SVN,349,Slovenia,705,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+SWE,380,Sweden,752,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+SWZ,572,Eswatini,748,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SYC,591,Seychelles,690,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+SYR,652,Syria,760,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+TCD,483,Chad,148,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+TGO,461,Togo,768,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+THA,800,Thailand,764,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+TJK,702,Tajikistan,762,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+TKM,701,Turkmenistan,795,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+TLS,860,Timor-Leste,626,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+TON,955,Tonga,776,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+TTO,52,Trinidad & Tobago,780,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+TUN,616,Tunisia,788,TRUE,Africa,Middle East & North Africa,Africa,FALSE
+TUR,640,Turkey,792,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+TUV,947,Tuvalu,798,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+TWN,713,Taiwan,NA,FALSE,NA,East Asia & Pacific,Asia,FALSE
+TZA,510,Tanzania,834,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+UGA,500,Uganda,800,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+UKR,369,Ukraine,804,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+URY,165,Uruguay,858,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+USA,2,United States,840,TRUE,Americas,North America,Americas,TRUE
+UZB,704,Uzbekistan,860,TRUE,Asia,Europe & Central Asia,Asia,FALSE
+VAT,327,Vatican City,336,TRUE,Europe,Europe & Central Asia,Europe,FALSE
+VCT,57,St. Vincent & Grenadines,670,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+VEN,101,Venezuela,862,TRUE,Americas,Latin America & Caribbean,Americas,FALSE
+VNM,816,Vietnam,704,TRUE,Asia,East Asia & Pacific,Asia,FALSE
+VUT,935,Vanuatu,548,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+WSM,990,Samoa,882,TRUE,Oceania,East Asia & Pacific,Oceania,FALSE
+YEM,679,Yemen,887,TRUE,Asia,Middle East & North Africa,Asia,FALSE
+ZAF,560,South Africa,710,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+ZMB,551,Zambia,894,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE
+ZWE,552,Zimbabwe,716,TRUE,Africa,Sub-Saharan Africa,Africa,FALSE

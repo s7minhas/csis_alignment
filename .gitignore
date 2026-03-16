@@ -1,0 +1,25 @@
+# Large data files (download via pipeline)
+data/raw/
+data/processed/*.rda
+data/networks/*.rda
+
+# Model objects (re-run pipeline to regenerate)
+results/models/*.rda
+
+# R artifacts
+.Rhistory
+.RData
+.Rproj.user/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+app/__pycache__/
+app/utils/__pycache__/
