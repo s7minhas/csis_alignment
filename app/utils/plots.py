@@ -167,53 +167,107 @@ def world_map_tilt(anchor_df, year):
 
 
 def country_trajectory(anchor_df, iso3, country_name):
-    """Line chart: alignment with US vs China over time for one country."""
-    df = anchor_df[anchor_df["country"] == iso3].sort_values("year")
+    """Combined chart: diplomatic alignment AND trade shares with US and China."""
+    from plotly.subplots import make_subplots
 
-    fig = go.Figure()
+    df = anchor_df[anchor_df["country"] == iso3].sort_values("year")
+    has_trade = "trade_share_US" in df.columns and df["trade_share_US"].notna().any()
+
+    if has_trade:
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+    else:
+        fig = go.Figure()
+
+    # diplomatic alignment (left y-axis, solid lines)
     fig.add_trace(go.Scatter(
         x=df["year"], y=df["alignment_with_US"],
-        name="Alignment with US", mode="lines",
+        name="Diplomatic: US", mode="lines",
         line=dict(color=COLORS["us"], width=2.5),
-    ))
+    ), secondary_y=False if has_trade else None)
+
     fig.add_trace(go.Scatter(
         x=df["year"], y=df["alignment_with_China"],
-        name="Alignment with China", mode="lines",
+        name="Diplomatic: China", mode="lines",
         line=dict(color=COLORS["china"], width=2.5),
-    ))
+    ), secondary_y=False if has_trade else None)
+
+    # trade shares (right y-axis, dashed lines)
+    if has_trade:
+        trade_df = df.dropna(subset=["trade_share_US"])
+        fig.add_trace(go.Scatter(
+            x=trade_df["year"], y=trade_df["trade_share_US"],
+            name="Trade: US", mode="lines",
+            line=dict(color=COLORS["us"], width=2, dash="dash"),
+        ), secondary_y=True)
+
+        fig.add_trace(go.Scatter(
+            x=trade_df["year"], y=trade_df["trade_share_China"],
+            name="Trade: China", mode="lines",
+            line=dict(color=COLORS["china"], width=2, dash="dash"),
+        ), secondary_y=True)
 
     _add_event_lines(fig, (df["year"].min(), df["year"].max()))
 
+    title = f"{country_name}: Diplomatic Alignment"
+    if has_trade:
+        title += " & Trade Dependence"
+
     fig.update_layout(
-        title=f"{country_name}: Diplomatic Alignment Trajectory",
-        xaxis_title=None, yaxis_title="Alignment Score",
-        yaxis_range=[0, 1],
+        title=title,
+        xaxis_title=None,
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
-        height=400, margin=dict(t=60),
+        height=420, margin=dict(t=70),
         hovermode="x unified",
     )
+
+    if has_trade:
+        fig.update_yaxes(title_text="Diplomatic Alignment", range=[0, 1],
+                         secondary_y=False)
+        fig.update_yaxes(title_text="Trade Share", range=[0, 1],
+                         tickformat=".0%", secondary_y=True)
+    else:
+        fig.update_yaxes(title_text="Alignment Score", range=[0, 1])
+
     return fig
 
 
 def tilt_trajectory(anchor_df, iso3, country_name):
-    """Area chart: US-minus-China tilt over time."""
+    """Combined tilt chart: diplomatic tilt and trade tilt on the same axes."""
     df = anchor_df[anchor_df["country"] == iso3].sort_values("year")
+    has_trade = "trade_US_minus_China" in df.columns and df["trade_US_minus_China"].notna().any()
 
     fig = go.Figure()
+
+    # diplomatic tilt
     fig.add_trace(go.Scatter(
         x=df["year"], y=df["US_minus_China"],
-        fill="tozeroy", mode="lines",
-        line=dict(color=COLORS["neutral"], width=2),
-        fillcolor="rgba(33,102,172,0.15)",
+        name="Diplomatic tilt", mode="lines",
+        line=dict(color=COLORS["neutral"], width=2.5),
+        fill="tozeroy", fillcolor="rgba(33,102,172,0.10)",
     ))
-    fig.add_hline(y=0, line_dash="dash", line_color="#999999")
 
-    # Color the area: blue above 0, red below
+    # trade tilt
+    if has_trade:
+        trade_df = df.dropna(subset=["trade_US_minus_China"])
+        fig.add_trace(go.Scatter(
+            x=trade_df["year"], y=trade_df["trade_US_minus_China"],
+            name="Trade tilt", mode="lines",
+            line=dict(color="#E08214", width=2.5, dash="dash"),
+        ))
+
+    fig.add_hline(y=0, line_dash="dash", line_color="#CCCCCC")
+
+    title = f"{country_name}: US-China Tilt"
+    if has_trade:
+        title += " (Diplomacy vs Trade)"
+
     fig.update_layout(
-        title=f"{country_name}: US-China Tilt",
+        title=title,
         xaxis_title=None,
         yaxis_title="← China · US →",
-        height=300, margin=dict(t=50),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        height=420, margin=dict(t=70),
+        hovermode="x unified",
     )
     return fig
 
@@ -384,9 +438,9 @@ def latent_space_scatter(latent_df, year, groups_df):
         )
 
     fig.update_layout(
-        title=f"Diplomatic Alignment Space ({year})",
-        height=650, margin=dict(t=80, l=20, r=20, b=20),
-        legend=dict(orientation="h", yanchor="bottom", y=1.06),
+        title=dict(text=f"Diplomatic Alignment Space ({year})", y=0.98),
+        height=700, margin=dict(t=100, l=20, r=20, b=20),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
                    title="", range=[-1.4, 1.4]),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
