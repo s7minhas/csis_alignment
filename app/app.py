@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from utils.data_loader import load_anchor_scores, load_bloc_summaries, load_actors, load_dyad_scores
-from utils.plots import world_map_tilt, bloc_cohesion_chart, bloc_tilt_chart, COLORS
+from utils.plots import world_map_tilt, bloc_cohesion_chart, bloc_tilt_chart, diplomacy_vs_trade_scatter, COLORS
 from utils.text import CAVEAT_BOX
 
 st.set_page_config(
@@ -102,6 +102,17 @@ with col_left:
 with col_right:
     st.plotly_chart(bloc_tilt_chart(bloc), use_container_width=True)
 
+# ── Diplomacy vs Trade scatter ──
+if "trade_share_US" in anchor.columns:
+    st.markdown("---")
+    st.plotly_chart(diplomacy_vs_trade_scatter(anchor, latest_year), use_container_width=True)
+    st.caption(
+        "Countries on the dashed diagonal are consistent — their diplomatic positions "
+        "and trade patterns point the same direction. Countries off the diagonal show "
+        "a divergence: they vote one way at the UNGA but trade in the other direction. "
+        "Trade data from IMF Direction of Trade Statistics and World Bank WITS."
+    )
+
 # ── Key takeaways (computed from data) ──
 st.markdown("---")
 st.subheader(f"Key Takeaways ({latest_year})")
@@ -175,6 +186,24 @@ takeaways.append(
     "US-India security ties deepen. This reflects shared positions "
     "on sovereignty and development, not strategic alignment with Beijing."
 )
+
+# Trade divergence takeaway
+if "trade_share_US" in anchor.columns:
+    trade_yr = anchor.loc[anchor["trade_share_US"].notna() & (anchor["trade_share_US"] > 0), "year"]
+    if len(trade_yr) > 0:
+        lt = int(trade_yr.max())
+        tdf = anchor[(anchor["year"] == lt) & (anchor["trade_share_US"].notna()) & (anchor["trade_share_US"] > 0)]
+        n_div = int(((tdf["US_minus_China"] > 0) != (tdf["trade_US_minus_China"] > 0)).sum())
+        aus = tdf[tdf["country"] == "AUS"]
+        if n_div > 0 and len(aus) > 0:
+            a = aus.iloc[0]
+            takeaways.append(
+                f"**Diplomacy and trade often point in different directions.** "
+                f"{n_div} countries show a divergence between how they vote and where they trade "
+                f"({lt}). Australia votes with the US (tilt {a['US_minus_China']:+.2f}) but sends "
+                f"{a['trade_share_China']:.0%} of its trade to China versus "
+                f"{a['trade_share_US']:.0%} to the US."
+            )
 
 for t in takeaways:
     st.markdown(f"- {t}")

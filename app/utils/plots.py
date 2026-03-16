@@ -27,6 +27,88 @@ BLOC_COLORS = {
     "Global South": COLORS["global_south"],
 }
 
+def diplomacy_vs_trade_scatter(anchor_df, year):
+    """Scatter: diplomatic tilt (x) vs trade tilt (y) for each country.
+    Countries on the diagonal are consistent. Off-diagonal = divergence."""
+    import numpy as np
+
+    df = anchor_df[(anchor_df["year"] == year)].copy()
+    # need both diplomatic and trade tilt
+    df = df.dropna(subset=["US_minus_China", "trade_US_minus_China"])
+    if len(df) == 0:
+        # fall back to previous year
+        df = anchor_df[(anchor_df["year"] == year - 1)].copy()
+        df = df.dropna(subset=["US_minus_China", "trade_US_minus_China"])
+        year = year - 1
+
+    if len(df) == 0:
+        return go.Figure().update_layout(title="No trade data available")
+
+    df["group_label"] = "Other"
+    df.loc[df["g7"] == True, "group_label"] = "G7"
+    df.loc[df["brics_original"] == True, "group_label"] = "BRICS"
+    df.loc[(df["global_south"] == True) & (df["group_label"] == "Other"), "group_label"] = "Global South"
+
+    color_map = {"G7": COLORS["g7"], "BRICS": COLORS["brics"],
+                 "Global South": COLORS["global_south"], "Other": "#AAAAAA"}
+
+    fig = go.Figure()
+
+    # diagonal line (consistency)
+    fig.add_trace(go.Scatter(
+        x=[-1, 1], y=[-1, 1], mode="lines",
+        line=dict(color="#DDDDDD", dash="dash", width=1),
+        showlegend=False, hoverinfo="skip",
+    ))
+
+    # quadrant labels
+    fig.add_annotation(x=0.6, y=-0.4, text="Votes US, trades China",
+                       showarrow=False, font=dict(size=10, color="#999999"))
+    fig.add_annotation(x=-0.6, y=0.4, text="Votes China, trades US",
+                       showarrow=False, font=dict(size=10, color="#999999"))
+
+    # plot each group
+    for group_name in ["G7", "BRICS", "Global South", "Other"]:
+        gdf = df[df["group_label"] == group_name]
+        if len(gdf) == 0:
+            continue
+        fig.add_trace(go.Scatter(
+            x=gdf["US_minus_China"].tolist(),
+            y=gdf["trade_US_minus_China"].tolist(),
+            mode="markers",
+            marker=dict(size=8, color=color_map.get(group_name, "#AAAAAA"), opacity=0.7),
+            name=group_name,
+            text=gdf["name_common"].tolist(),
+            customdata=np.stack([gdf["country"].values,
+                                 gdf["US_minus_China"].values,
+                                 gdf["trade_US_minus_China"].values], axis=-1),
+            hovertemplate="<b>%{text}</b><br>Diplomatic tilt: %{customdata[1]:.2f}<br>"
+                          "Trade tilt: %{customdata[2]:.2f}<extra></extra>",
+        ))
+
+    # key country labels
+    for _, row in df[df["country"].isin(
+        ["AUS", "KOR", "IND", "MEX", "BRA", "RUS", "GBR", "JPN",
+         "SAU", "TUR", "DEU", "CAN", "VNM", "PRK", "CUB"])].iterrows():
+        fig.add_annotation(
+            x=row["US_minus_China"], y=row["trade_US_minus_China"],
+            text=row["country"], showarrow=False,
+            font=dict(size=8, color="#333333"), yshift=10,
+        )
+
+    fig.update_layout(
+        title=f"Diplomacy vs Trade: Where Do They Diverge? ({year})",
+        xaxis=dict(title="← China · Diplomatic Tilt · US →", range=[-1.1, 1.1], zeroline=True,
+                   zerolinecolor="#EEEEEE"),
+        yaxis=dict(title="← China · Trade Tilt · US →", range=[-1.1, 1.1], zeroline=True,
+                   zerolinecolor="#EEEEEE"),
+        height=500, margin=dict(t=50),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        plot_bgcolor="white",
+    )
+    return fig
+
+
 EVENT_ANNOTATIONS = [
     (1991, "USSR Dissolves"),
     (2001, "9/11"),
@@ -303,8 +385,8 @@ def latent_space_scatter(latent_df, year, groups_df):
 
     fig.update_layout(
         title=f"Diplomatic Alignment Space ({year})",
-        height=650, margin=dict(t=50, l=20, r=20, b=20),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02),
+        height=650, margin=dict(t=80, l=20, r=20, b=20),
+        legend=dict(orientation="h", yanchor="bottom", y=1.06),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
                    title="", range=[-1.4, 1.4]),
         yaxis=dict(showgrid=False, zeroline=False, showticklabels=False,

@@ -102,39 +102,58 @@ if g7_brics_tilt is not None and pd.notna(g7_brics_tilt):
     col6.metric("G7-BRICS Tilt", f"{g7_brics_tilt:+.2f}",
                 help="Positive = closer to G7, negative = closer to BRICS")
 
-# Trade coupling (if available)
-has_trade = "trade_coupling_US" in latest.index and pd.notna(latest.get("trade_coupling_US"))
+# Trade dependence (if available — trade data covers 1990-2023)
+# For 2024 the latest trade year is 2023, so look back one year if needed
+_trade_row = latest
+if "trade_share_US" not in _trade_row.index or pd.isna(_trade_row.get("trade_share_US")):
+    _prev = anchor[(anchor["country"] == selected_iso3) & (anchor["year"] == latest_year - 1)]
+    if len(_prev) > 0:
+        _trade_row = _prev.iloc[0]
+
+has_trade = "trade_share_US" in _trade_row.index and pd.notna(_trade_row.get("trade_share_US")) and _trade_row.get("trade_share_US", 0) > 0
+
 if has_trade:
+    st.markdown("---")
+    st.markdown("#### Trade Dependence")
     col7, col8, col9 = st.columns(3)
-    col7.metric("Trade Coupling with US", f"{latest['trade_coupling_US']:.2f}",
-                help="How closely linked via bilateral trade to the US (0–1)")
-    col8.metric("Trade Coupling with China", f"{latest['trade_coupling_China']:.2f}",
-                help="How closely linked via bilateral trade to China (0–1)")
-    trade_tilt = latest.get("trade_US_minus_China", None)
+    col7.metric("Trade with US", f"{_trade_row['trade_share_US']:.1%}",
+                help="Share of total bilateral trade with the US")
+    col8.metric("Trade with China", f"{_trade_row['trade_share_China']:.1%}",
+                help="Share of total bilateral trade with China")
+    trade_tilt = _trade_row.get("trade_US_minus_China", None)
     if trade_tilt is not None and pd.notna(trade_tilt):
-        col9.metric("Trade US-China Tilt", f"{trade_tilt:+.2f}",
-                    help="Positive = more trade-coupled with US, negative = with China")
+        col9.metric("Trade US-China Balance", f"{trade_tilt:+.1%}",
+                    help="Positive = trades more with US, negative = more with China")
+
+    col10, col11, col12 = st.columns(3)
+    col10.metric("Trade with G7", f"{_trade_row.get('trade_share_G7', 0):.1%}",
+                 help="Share of total trade with G7 countries")
+    col11.metric("Trade with BRICS", f"{_trade_row.get('trade_share_BRICS', 0):.1%}",
+                 help="Share of total trade with BRICS countries")
+    g7b_trade = _trade_row.get("trade_G7_minus_BRICS", None)
+    if g7b_trade is not None and pd.notna(g7b_trade):
+        col12.metric("Trade G7-BRICS Balance", f"{g7b_trade:+.1%}",
+                     help="Positive = trades more with G7, negative = more with BRICS")
 
 tilt_desc = format_tilt_description(latest["US_minus_China"])
 st.markdown(f"**{latest_year} assessment:** {tilt_desc}")
 
 # Flag where diplomacy and trade diverge
 if has_trade:
-    diplo_us = latest["alignment_with_US"]
-    trade_us = latest["trade_coupling_US"]
-    gap = diplo_us - trade_us
-    if abs(gap) > 0.2:
-        if gap > 0:
+    diplo_closer_to_us = latest["US_minus_China"] > 0
+    trade_closer_to_us = _trade_row.get("trade_US_minus_China", 0) > 0
+    if diplo_closer_to_us != trade_closer_to_us:
+        if diplo_closer_to_us and not trade_closer_to_us:
             st.info(
-                f"**Diplomacy-trade gap:** {selected_name} is diplomatically closer to the US "
-                f"(alignment {diplo_us:.2f}) than its trade patterns suggest (coupling {trade_us:.2f}). "
-                f"This may indicate a country whose economic relationships lag behind its diplomatic repositioning."
+                f"**Diplomacy-trade divergence:** {selected_name} votes closer to the US at the UNGA "
+                f"but trades more with China ({_trade_row['trade_share_China']:.1%}) than the US "
+                f"({_trade_row['trade_share_US']:.1%})."
             )
-        else:
+        elif not diplo_closer_to_us and trade_closer_to_us:
             st.info(
-                f"**Diplomacy-trade gap:** {selected_name} is more economically coupled with the US "
-                f"(trade coupling {trade_us:.2f}) than its diplomatic positions suggest (alignment {diplo_us:.2f}). "
-                f"This country trades heavily with the US-led economic order while voting differently at the UNGA."
+                f"**Diplomacy-trade divergence:** {selected_name} votes closer to China at the UNGA "
+                f"but trades more with the US ({_trade_row['trade_share_US']:.1%}) than China "
+                f"({_trade_row['trade_share_China']:.1%})."
             )
 
 # ── Trajectory charts ──
