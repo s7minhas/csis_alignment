@@ -88,6 +88,32 @@ anchor_combined = anchor_combined %>%
 		structural_vs_trade_gap = alignment_with_US - trade_coupling_US
 	)
 
+# export trade latent positions for circplot
+# sender (U) and receiver (V) exported separately
+# following lame uv_plot convention: U = outer ring, V = inner ring
+trade_latent_list = list()
+for (t in 1:n_times) {
+	yr = years[t]
+	U_t = U[, , t]
+	V_t = if (!is.null(V)) V[, , t] else U_t
+
+	for (i in 1:n_actors) {
+		trade_latent_list[[length(trade_latent_list) + 1]] = data.frame(
+			iso3 = actor_names[i],
+			year = yr,
+			u_dim1 = U_t[i, 1], u_dim2 = U_t[i, 2],
+			v_dim1 = V_t[i, 1], v_dim2 = V_t[i, 2],
+			stringsAsFactors = FALSE
+		)
+	}
+}
+
+trade_latent_positions = do.call(rbind, trade_latent_list) %>%
+	as_tibble() %>%
+	left_join(registry %>% select(iso3, name_common), by = 'iso3') %>%
+	left_join(groups %>% select(iso3, g7, brics_original, global_south), by = 'iso3')
+
 # save
 write_csv(anchor_combined, file.path(res_scores, 'country_year_anchor.csv'))
 write_csv(trade_df, file.path(res_scores, 'dyad_year_trade_scores.csv'))
+write_csv(trade_latent_positions, file.path(res_scores, 'trade_latent_positions.csv'))

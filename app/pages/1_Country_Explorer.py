@@ -109,7 +109,7 @@ if g7_brics_tilt is not None and pd.notna(g7_brics_tilt):
                 help="The difference between alignment with G7 and alignment with BRICS. "
                      "Positive = votes more like G7, negative = votes more like BRICS.")
 
-# Trade dependence (if available — trade data covers 1990-2023)
+# trade alignment (if available — trade data covers 1990-2023)
 # For 2024 the latest trade year is 2023, so look back one year if needed
 _trade_row = latest
 if "trade_share_US" not in _trade_row.index or pd.isna(_trade_row.get("trade_share_US")):
@@ -121,7 +121,7 @@ has_trade = "trade_share_US" in _trade_row.index and pd.notna(_trade_row.get("tr
 
 if has_trade:
     st.markdown("---")
-    st.markdown("#### Trade Dependence")
+    st.markdown("#### Trade Alignment")
     col7, col8, col9 = st.columns(3)
     col7.metric("Trade with US", f"{_trade_row['trade_share_US']:.1%}",
                 help="What percentage of this country's total trade (exports + imports) "

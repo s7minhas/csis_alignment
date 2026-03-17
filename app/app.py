@@ -1,6 +1,6 @@
 """
 Dynamic Alignment Observatory
-Mapping diplomatic alignment and trade dependence across the international system.
+Mapping diplomatic alignment and trade structure across the international system.
 """
 
 import streamlit as st
@@ -29,12 +29,12 @@ latest_year = int(anchor["year"].max())
 
 # ── Header ──
 st.title("Dynamic Alignment Observatory")
-st.markdown("**Mapping diplomatic alignment and trade dependence across the international system.**")
+st.markdown("**Mapping diplomatic alignment and trade structure across the international system.**")
 n_countries = anchor["country"].nunique() + 2  # +2 for USA and CHN (anchor states)
 st.markdown(
     f"*{n_countries} countries, {int(anchor['year'].min())}–{latest_year}. "
     f"Diplomatic alignment from UN General Assembly voting. "
-    f"Trade dependence from bilateral trade flows (IMF/WITS).*"
+    f"Trade alignment from bilateral trade flows (IMF/WITS).*"
 )
 
 # ── Sidebar ──
@@ -46,9 +46,9 @@ with st.sidebar:
     st.page_link("pages/1_Country_Explorer.py", label="Country Explorer")
     st.page_link("pages/2_Dyad_Comparison.py", label="Compare Two Countries")
     st.page_link("pages/3_Bloc_Dashboard.py", label="Bloc Dashboard")
-    st.page_link("pages/4_Alignment_Space.py", label="Diplomatic Alignment Space")
-    st.page_link("pages/4b_Trade_Dependence_Space.py", label="Trade Dependence Space")
-    st.page_link("pages/5_Methodology.py", label="Methodology & Caveats")
+    st.page_link("pages/4_Diplomatic_Space.py", label="Diplomatic Space")
+    st.page_link("pages/5_Trade_Space.py", label="Trade Space")
+    st.page_link("pages/6_Methodology.py", label="Methodology & Caveats")
     st.markdown("---")
     st.caption(f"UNGA voting through {latest_year}. Trade through 2023.")
     st.caption("Minhas (MSU) × CSIS")
@@ -56,11 +56,11 @@ with st.sidebar:
 # ── World Map ──
 map_metric = st.selectbox(
     "Map metric",
-    ["Diplomatic alignment (UNGA voting)", "Trade dependence (bilateral trade)"],
+    ["Diplomatic alignment (UNGA voting)", "Trade alignment (bilateral trade)"],
     index=0,
 )
 
-if map_metric == "Trade dependence (bilateral trade)" and "trade_US_minus_China" in anchor.columns:
+if map_metric == "Trade alignment (bilateral trade)" and "trade_US_minus_China" in anchor.columns:
     _trade_anchor = anchor.copy()
     _trade_years = _trade_anchor.loc[_trade_anchor["trade_US_minus_China"].notna(), "year"]
     _trade_map_year = map_year
@@ -70,7 +70,7 @@ if map_metric == "Trade dependence (bilateral trade)" and "trade_US_minus_China"
         _trade_map_year = int(_trade_years[_trade_years <= map_year].max())
     _trade_anchor["US_minus_China"] = _trade_anchor["trade_US_minus_China"]
     fig_map = world_map_tilt(_trade_anchor, _trade_map_year)
-    fig_map.update_layout(title=f"Trade Dependence: US vs China ({_trade_map_year})")
+    fig_map.update_layout(title=f"Trade Alignment: US vs China ({_trade_map_year})")
     fig_map.update_layout(coloraxis_colorbar=dict(
         title="Trade balance",
         tickvals=[-0.8, -0.4, 0, 0.4, 0.8],
@@ -137,7 +137,7 @@ if "trade_share_US" in anchor.columns:
     st.plotly_chart(diplomacy_vs_trade_scatter(anchor, latest_year), use_container_width=True)
     st.caption(
         "Countries on the dashed diagonal are consistent — their diplomatic alignment "
-        "and trade dependence point the same direction. Countries off the diagonal show "
+        "and trade alignment point the same direction. Countries off the diagonal show "
         "a divergence: they vote one way at the UNGA but trade in the other direction. "
         "Trade data from IMF Direction of Trade Statistics and World Bank WITS."
     )

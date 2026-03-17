@@ -126,7 +126,7 @@ with st.expander("Important caveats"):
     st.markdown(CAVEAT_BOX)
     st.markdown(
         "**Reminder:** This score is based on UN General Assembly voting "
-        "and captures diplomatic position-taking. Trade dependence data is "
+        "and captures diplomatic position-taking. Trade alignment data is "
         "available in the Country Explorer. Military cooperation, intelligence "
         "sharing, and other channels are not reflected here."
     )

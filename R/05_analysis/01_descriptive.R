@@ -28,9 +28,8 @@ us_china_agree = unga_clean %>%
 	summarize(agreement = mean(agree, na.rm = TRUE), .groups = 'drop')
 
 p1 = ggplot(us_china_agree, aes(x = year, y = agreement)) +
-	geom_line(linewidth = 1.2, color = csis_colors['neutral']) +
-	geom_smooth(method = 'loess', span = 0.3, se = TRUE,
-	            color = csis_colors['china'], fill = csis_colors['china'], alpha = 0.2) +
+	geom_line(linewidth = 1.2) +
+	geom_smooth(method = 'loess', span = 0.3, se = TRUE, alpha = 0.2) +
 	labs(title = 'US-China Diplomatic Alignment',
 	     subtitle = 'UNGA voting agreement score, 1965-2024',
 	     x = NULL, y = 'Agreement Score') +

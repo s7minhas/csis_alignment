@@ -83,7 +83,7 @@ p9 = ggplot(bloc_df, aes(x = year, y = US_minus_China, color = bloc)) +
 	geom_hline(yintercept = 0, linetype = 'dashed', color = '#636363') +
 	labs(title = 'Bloc-Level US vs China Tilt',
 	     subtitle = 'Mean (alignment with US) - (alignment with China) within each bloc',
-	     x = NULL, y = 'US minus China (mean within bloc)', color = NULL) +
+	     x = NULL, y = 'US minus China (Mean within Bloc)', color = NULL) +
 	theme_csis() +
 	scale_color_manual(values = c('G7' = '#2166AC', 'BRICS' = '#B2182B',
 	                               'NATO' = '#4393C3', 'ASEAN' = '#1B7837',

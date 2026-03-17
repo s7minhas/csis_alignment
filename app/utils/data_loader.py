@@ -32,6 +32,14 @@ def load_latent_positions():
 
 
 @st.cache_data
+def load_trade_latent_positions():
+    path = DATA_DIR / "trade_latent_positions.csv"
+    if path.exists():
+        return pd.read_csv(path)
+    return None
+
+
+@st.cache_data
 def load_group_membership():
     df = pd.read_csv(DATA_DIR / "group_membership.csv")
     return df

@@ -1,8 +1,8 @@
 # Dynamic Alignment Observatory
 
-**Mapping diplomatic alignment and trade dependence across the international system.**
+**Mapping diplomatic alignment and trade structure across the international system.**
 
-Interactive dashboard tracking diplomatic alignment (UNGA voting) and trade dependence (bilateral trade flows) across 193 countries (1990–2024).
+Interactive dashboard tracking diplomatic alignment (UNGA voting) and trade alignment (bilateral trade flows) across 193 countries (1990–2024).
 
 Developed by [Shahryar Minhas](https://s7minhas.com) (Michigan State University) in collaboration with the [Center for Strategic and International Studies (CSIS)](https://www.csis.org).
 

@@ -6,9 +6,9 @@ CAVEAT_BOX = """
 > The diplomatic alignment scores on this dashboard reflect **position-taking
 > at the UN General Assembly** — how similarly two countries vote on
 > international resolutions covering sovereignty, human rights, security, and
-> related issues. The trade dependence figures reflect **bilateral trade
-> shares** — what fraction of a country's imports and exports flow to or from
-> a given partner.
+> related issues. The trade figures reflect **bilateral trade flows** analyzed
+> through the same latent factor framework, capturing structural similarities
+> in countries' export and import profiles.
 >
 > Neither measure captures the full bilateral relationship. Countries can
 > vote similarly at the UNGA while maintaining serious bilateral tensions
@@ -36,10 +36,11 @@ come from Erik Voeten's widely used
 [UN voting dataset](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/LEJUQZ)
 hosted at Harvard Dataverse. The model covers 193 countries from 1990 to 2024.
 
-**Trade dependence** is derived from bilateral trade flows reported by the
-IMF Direction of Trade Statistics (1990–2020) and the World Bank WITS database
-(2021–2023). For each country in each year, we compute the share of total
-trade (exports plus imports) conducted with each partner.
+**Trade alignment** is derived from bilateral trade flows reported by the
+IMF Direction of Trade Statistics (1990 to 2020) and the World Bank WITS
+database (2021 to 2023). The same LAME framework applied to UNGA voting
+is also applied to the directed trade network, producing latent positions
+that capture structural patterns in who trades with whom.
 
 ### Model
 
@@ -56,8 +57,15 @@ countries vote the same way, because it captures indirect structure: if
 France and Germany both vote with the same coalition of 50 countries, they
 are estimated as aligned even on resolutions where one of them abstains.
 
-Trade dependence does not pass through a statistical model. The trade shares
-reported on the dashboard are computed directly from observed bilateral flows.
+The same LAME framework is applied to directed bilateral trade flows.
+Because trade is directed (exports from A to B differ from exports from
+B to A), the trade model estimates two sets of latent positions for each
+country: sender (exporter) positions capturing similarities in export
+destinations, and receiver (importer) positions capturing similarities
+in import sources. Countries with similar trade profiles occupy nearby
+positions in the latent trade space. The dashboard also reports raw trade
+shares (percentage of trade with a given partner) computed directly from
+observed bilateral flows.
 
 ### Glossary of Terms
 
@@ -67,10 +75,12 @@ vote identically across resolutions; a score of 0 means their voting patterns
 are as different as any pair in the dataset that year. Computed from the
 Euclidean distance between latent positions, normalized within each year.
 
-**Trade dependence** (reported as a percentage): The share of a country's
-total bilateral trade (exports plus imports) that flows to or from a
-particular partner. For example, "Trade with China: 36%" means 36 percent
-of that country's worldwide trade is with China.
+**Trade alignment**: Structural similarity in trade patterns, estimated
+from the same latent factor model applied to directed bilateral trade
+flows. Countries that export to and import from similar partners occupy
+nearby positions in the trade latent space. Where the dashboard reports
+trade as a percentage (e.g., "Trade with China: 36%"), this refers to
+the share of a country's total trade flowing to or from that partner.
 
 **US-China tilt** (ranges from roughly -1 to +1): The difference between a
 country's diplomatic alignment with the US and its diplomatic alignment with
@@ -85,12 +95,12 @@ mean the group's members vote more similarly to one another. A cohesion of
 aligned in UNGA voting.
 
 **Trade US-China balance** (reported as a percentage difference): The
-difference between a country's trade share with the US and its trade share
-with China. Positive means the country trades more with the US; negative
+difference between a country's trade alignment with the US and its trade
+alignment with China. Positive means the country trades more with the US; negative
 means it trades more with China.
 
 **Diplomacy-trade divergence**: Cases where a country's diplomatic
-alignment and its trade dependence point in different directions relative to
+alignment and its trade relationships point in different directions relative to
 the US and China. For example, a country that votes more like the US but
 trades more with China exhibits a diplomacy-trade divergence.
 
@@ -105,15 +115,15 @@ receives a score near 0.
 For each country in each year, the dashboard reports diplomatic alignment
 with the US (0 to 1), diplomatic alignment with China (0 to 1), and the
 US-China tilt (the difference between the two). Bloc-level summaries
-average these scores across group members. Trade dependence figures are
-computed directly from bilateral trade data without modeling.
+average these scores across group members. Trade alignment positions
+are estimated from the directed trade network via the LAME model.
 
 ### Limitations
 
 UNGA voting captures one dimension of interstate relations. Military
 cooperation, intelligence sharing, summit diplomacy, and crisis behavior
 operate through separate channels and are not reflected in the diplomatic
-alignment scores. Trade dependence captures a second dimension but does
+alignment scores. Trade alignment captures a second dimension but does
 not account for the composition of trade, investment flows, or financial
 linkages.
 
@@ -165,8 +175,7 @@ This tool was developed as a collaboration between
 [Shahryar Minhas](https://s7minhas.com) (Michigan State University) and the
 [Center for Strategic and International Studies (CSIS)](https://www.csis.org).
 It combines UN General Assembly voting data with bilateral trade flows to
-measure both diplomatic alignment and trade dependence across all UN member
-states.
+measure both diplomatic and trade alignment across all UN member states.
 
 **Contact**: David Peng (CSIS), Shahryar Minhas (MSU)
 

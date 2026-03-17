@@ -1,4 +1,4 @@
-"""Alignment Space — interactive circular latent space visualization."""
+"""Diplomatic Space — circular layout of UNGA voting latent positions."""
 
 import streamlit as st
 import pandas as pd
@@ -11,14 +11,14 @@ from utils.data_loader import load_latent_positions, load_group_membership, load
 from utils.plots import latent_space_scatter
 from utils.text import CAVEAT_BOX
 
-st.set_page_config(page_title="Alignment Space", page_icon="", layout="wide")
-st.title("The Diplomatic Alignment Space")
+st.set_page_config(page_title="Diplomatic Space", page_icon="", layout="wide")
+st.title("Diplomatic Alignment Space")
 
 st.markdown(
     "Each dot is a country placed on a circle according to its diplomatic "
     "voting position. **Countries that vote with the same coalitions appear "
     "near each other.** Node size reflects how distinctive a country's voting "
-    "pattern is. Use the **Color by** dropdown to overlay trade dependence "
+    "pattern is. Use the **Color by** dropdown to overlay trade alignment "
     "onto the diplomatic map — revealing where economic relationships diverge "
     "from diplomatic positions."
 )
@@ -40,7 +40,7 @@ with col_slider:
 has_trade = "trade_US_minus_China" in anchor.columns
 color_options = ["Bloc membership"]
 if has_trade:
-    color_options.append("Trade dependence (US vs China)")
+    color_options.append("Trade alignment (US vs China)")
     color_options.append("Diplomacy vs trade gap")
 
 with col_color:
@@ -79,9 +79,9 @@ else:
     mag_min, mag_range = mag.min(), mag.max() - mag.min() + 0.01
     lat_merged["node_size"] = 4 + 16 * (mag - mag_min) / mag_range
 
-    if color_by == "Trade dependence (US vs China)":
+    if color_by == "Trade alignment (US vs China)":
         color_col = "trade_US_minus_China"
-        color_label = "Trade dependence"
+        color_label = "Trade alignment"
         cmin, cmax = -0.8, 0.8
     else:
         # Diplomacy-trade gap = diplomatic tilt minus trade tilt
@@ -146,21 +146,31 @@ st.plotly_chart(fig, use_container_width=True)
 # ── How to read this ──
 with st.expander("How to read this chart"):
     st.markdown("""
-**What you're looking at:** Each country's latent voting position is shown as
-a direction on a circle. The model estimates a two-dimensional vector for each
-country; the **angle** on the circle represents the direction of that vector
-(which coalition a country votes with). **Node size** reflects magnitude
-(how strongly the country's voting deviates from the global average).
+This visualization is produced by a longitudinal additive and multiplicative
+effects model (LAME) applied to UNGA roll-call votes. The model estimates a
+latent position for each country in each year, capturing the structure of
+who votes with whom beyond what covariates and additive effects explain
+(Minhas et al., "Taking Dyads Seriously," 2022).
 
-**Color modes:**
-- **Bloc membership**: Countries colored by G7, BRICS, Global South, or Other
-- **Trade dependence (US vs China)**: Blue = larger share of trade with the US, red = larger share with China. This overlays economic relationships onto the diplomatic map — look for countries whose trade color doesn't match their diplomatic position.
-- **Diplomacy vs trade gap**: Blue = this country votes more like the US than its trade would suggest, red = votes more like China than its trade would suggest. White countries are consistent across both dimensions.
+Because UNGA voting is **undirected** (agreement between A and B is
+symmetric), the model estimates a single latent vector per country. Each
+country's vector is normalized to unit length and placed on the circle at
+the corresponding angle. **Countries that consistently vote with the same
+coalitions appear near each other on the circle; countries that vote with
+opposing coalitions appear on opposite sides.**
 
-**What to look for:**
-- **Nearby countries** on the circle vote with the same coalitions
-- **Countries on opposite sides** vote with opposing coalitions
-- In trade-colored mode: a **red dot on the US side** of the circle means a country votes with the US but trades more with China (e.g., Australia, South Korea)
+**Node size** encodes the magnitude of the latent effect. Larger nodes
+indicate countries whose voting patterns are more distinctive relative to
+the global average. Countries near the center of the circle have less
+distinctive voting profiles.
+
+**Color modes:** "Bloc membership" colors countries by G7, BRICS, Global
+South, or Other. "Trade alignment (US vs China)" overlays trade
+relationships onto the diplomatic map, with blue indicating closer trade
+alignment with the US and red indicating closer alignment with China.
+"Diplomacy vs trade gap" highlights cases where a country's diplomatic
+position and trade relationships point in opposite directions relative
+to the US and China. White indicates consistency across both dimensions.
 """)
 
 # ── Caveat ──

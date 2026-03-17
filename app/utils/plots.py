@@ -3,6 +3,7 @@
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+import numpy as np
 
 # Color scheme
 COLORS = {
@@ -30,7 +31,6 @@ BLOC_COLORS = {
 def diplomacy_vs_trade_scatter(anchor_df, year):
     """Scatter: diplomatic tilt (x) vs trade tilt (y) for each country.
     Countries on the diagonal are consistent. Off-diagonal = divergence."""
-    import numpy as np
 
     df = anchor_df[(anchor_df["year"] == year)].copy()
     # need both diplomatic and trade tilt
@@ -100,7 +100,7 @@ def diplomacy_vs_trade_scatter(anchor_df, year):
         title=f"Diplomacy vs Trade: Where Do They Diverge? ({year})",
         xaxis=dict(title="← China · Diplomatic Tilt · US →", range=[-1.1, 1.1], zeroline=True,
                    zerolinecolor="#EEEEEE"),
-        yaxis=dict(title="← China · Trade Dependence · US →", range=[-1.1, 1.1], zeroline=True,
+        yaxis=dict(title="← China · Trade Alignment · US →", range=[-1.1, 1.1], zeroline=True,
                    zerolinecolor="#EEEEEE"),
         height=500, margin=dict(t=90),
         legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
@@ -167,7 +167,7 @@ def world_map_tilt(anchor_df, year):
 
 
 def country_trajectory(anchor_df, iso3, country_name):
-    """Combined chart: diplomatic alignment AND trade shares with US and China."""
+    """Combined chart: diplomatic alignment and trade alignment with US and China."""
     from plotly.subplots import make_subplots
 
     df = anchor_df[anchor_df["country"] == iso3].sort_values("year")
@@ -191,7 +191,7 @@ def country_trajectory(anchor_df, iso3, country_name):
         line=dict(color=COLORS["china"], width=2.5),
     ), secondary_y=False if has_trade else None)
 
-    # trade shares (right y-axis, dashed lines)
+    # trade alignment (right y-axis, dashed lines)
     if has_trade:
         trade_df = df.dropna(subset=["trade_share_US"])
         fig.add_trace(go.Scatter(
@@ -210,7 +210,7 @@ def country_trajectory(anchor_df, iso3, country_name):
 
     title = f"{country_name}: Diplomatic Alignment"
     if has_trade:
-        title += " & Trade Dependence"
+        title += " & Trade Alignment"
 
     fig.update_layout(
         title=title,
@@ -223,7 +223,7 @@ def country_trajectory(anchor_df, iso3, country_name):
     if has_trade:
         fig.update_yaxes(title_text="Diplomatic Alignment", range=[0, 1],
                          secondary_y=False)
-        fig.update_yaxes(title_text="Trade Share", range=[0, 1],
+        fig.update_yaxes(title_text="Trade Alignment", range=[0, 1],
                          tickformat=".0%", secondary_y=True)
     else:
         fig.update_yaxes(title_text="Diplomatic Alignment", range=[0, 1])
@@ -251,7 +251,7 @@ def tilt_trajectory(anchor_df, iso3, country_name):
         trade_df = df.dropna(subset=["trade_US_minus_China"])
         fig.add_trace(go.Scatter(
             x=trade_df["year"], y=trade_df["trade_US_minus_China"],
-            name="Trade dependence", mode="lines",
+            name="Trade alignment", mode="lines",
             line=dict(color="#E08214", width=2.5, dash="dash"),
         ))
 
@@ -259,7 +259,7 @@ def tilt_trajectory(anchor_df, iso3, country_name):
 
     title = f"{country_name}: US-China Tilt"
     if has_trade:
-        title += " (Diplomatic Alignment vs Trade Dependence)"
+        title += " (Diplomatic Alignment vs Trade Alignment)"
 
     fig.update_layout(
         title=title,
@@ -359,7 +359,6 @@ def latent_space_scatter(latent_df, year, groups_df):
     jitter so overlapping nodes separate. Node SIZE encodes magnitude
     (how strongly the country's voting deviates from the global mean).
     """
-    import numpy as np
 
     df = latent_df[latent_df["year"] == year].copy()
 
@@ -439,6 +438,139 @@ def latent_space_scatter(latent_df, year, groups_df):
 
     fig.update_layout(
         title=dict(text=f"Diplomatic Alignment Space ({year})", y=0.98),
+        height=700, margin=dict(t=100, l=20, r=20, b=20),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
+                   title="", range=[-1.4, 1.4]),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
+                   title="", range=[-1.4, 1.4], scaleanchor="x", scaleratio=1),
+        plot_bgcolor="white",
+    )
+    return fig
+
+
+def trade_latent_space_scatter(trade_latent_df, year, groups_df, vscale=0.8):
+    """Concentric circular layout of trade latent positions following lame uv_plot.
+
+    Outer ring: sender (U) positions — countries with similar export profiles
+    cluster together. Inner ring: receiver (V) positions — countries with
+    similar import profiles cluster together. Node size encodes magnitude.
+    """
+
+    df = trade_latent_df[trade_latent_df["year"] == year].copy()
+
+    # sender magnitudes and unit vectors
+    u_mag = np.sqrt(df["u_dim1"].values**2 + df["u_dim2"].values**2)
+    safe_u = np.where(u_mag > 1e-10, u_mag, 1.0)
+    u_norm_x = df["u_dim1"].values / safe_u
+    u_norm_y = df["u_dim2"].values / safe_u
+
+    # receiver magnitudes and unit vectors
+    v_mag = np.sqrt(df["v_dim1"].values**2 + df["v_dim2"].values**2)
+    safe_v = np.where(v_mag > 1e-10, v_mag, 1.0)
+    v_angle = np.arctan2(df["v_dim2"].values / safe_v, df["v_dim1"].values / safe_v)
+
+    n = len(df)
+    jitter_factor = 0.15
+
+    # sender positions on outer ring (radius ~ 1)
+    u_rank = pd.Series(u_mag).rank().values / (n + 1)
+    u_radii = 1.0 + jitter_factor * (u_rank - 0.5)
+    df["u_cx"] = u_norm_x * u_radii
+    df["u_cy"] = u_norm_y * u_radii
+
+    # receiver positions on inner ring (radius ~ vscale)
+    v_rank = pd.Series(v_mag).rank().values / (n + 1)
+    v_radii = vscale + jitter_factor * vscale * (v_rank - 0.5)
+    df["v_cx"] = v_radii * np.cos(v_angle)
+    df["v_cy"] = v_radii * np.sin(v_angle)
+
+    # node sizes scaled by magnitude (larger default than diplomatic space)
+    u_min, u_range = u_mag.min(), u_mag.max() - u_mag.min() + 0.01
+    v_min, v_range = v_mag.min(), v_mag.max() - v_mag.min() + 0.01
+    df["u_size"] = 8 + 20 * (u_mag - u_min) / u_range
+    df["v_size"] = 6 + 16 * (v_mag - v_min) / v_range
+
+    # group labels
+    df["group_label"] = "Other"
+    df.loc[df["g7"] == True, "group_label"] = "G7"
+    df.loc[df["brics_original"] == True, "group_label"] = "BRICS"
+    df.loc[(df["global_south"] == True) & (df["group_label"] == "Other"), "group_label"] = "Global South"
+
+    color_map = {"G7": COLORS["g7"], "BRICS": COLORS["brics"],
+                 "Global South": COLORS["global_south"], "Other": "#AAAAAA"}
+
+    fig = go.Figure()
+
+    # reference circles: outer for senders, inner for receivers
+    theta = np.linspace(0, 2 * np.pi, 200)
+    fig.add_trace(go.Scatter(
+        x=np.cos(theta).tolist(), y=np.sin(theta).tolist(),
+        mode="lines", line=dict(color="#DDDDDD", dash="dot", width=1),
+        showlegend=False, hoverinfo="skip",
+    ))
+    fig.add_trace(go.Scatter(
+        x=(vscale * np.cos(theta)).tolist(), y=(vscale * np.sin(theta)).tolist(),
+        mode="lines", line=dict(color="#DDDDDD", dash="dot", width=1),
+        showlegend=False, hoverinfo="skip",
+    ))
+
+    # plot sender positions (outer ring, triangles)
+    for group_name in ["G7", "BRICS", "Global South", "Other"]:
+        gdf = df[df["group_label"] == group_name]
+        if len(gdf) == 0:
+            continue
+        fig.add_trace(go.Scatter(
+            x=gdf["u_cx"].tolist(), y=gdf["u_cy"].tolist(),
+            mode="markers",
+            marker=dict(
+                size=gdf["u_size"].tolist(),
+                color=color_map.get(group_name, "#AAAAAA"),
+                symbol="triangle-up",
+                opacity=0.8,
+                line=dict(width=0.5, color="white"),
+            ),
+            name=f"{group_name} (Exporter)",
+            text=gdf["name_common"].tolist(),
+            customdata=np.stack([gdf["iso3"].values, u_mag[gdf.index - gdf.index[0]]], axis=-1) if len(gdf) > 0 else None,
+            hovertemplate="<b>%{text}</b> (Exporter)<br>%{customdata[0]}<extra></extra>",
+            legendgroup=group_name,
+        ))
+
+    # plot receiver positions (inner ring, circles)
+    for group_name in ["G7", "BRICS", "Global South", "Other"]:
+        gdf = df[df["group_label"] == group_name]
+        if len(gdf) == 0:
+            continue
+        fig.add_trace(go.Scatter(
+            x=gdf["v_cx"].tolist(), y=gdf["v_cy"].tolist(),
+            mode="markers",
+            marker=dict(
+                size=gdf["v_size"].tolist(),
+                color=color_map.get(group_name, "#AAAAAA"),
+                symbol="circle",
+                opacity=0.5,
+                line=dict(width=0.5, color="white"),
+            ),
+            name=f"{group_name} (Importer)",
+            text=gdf["name_common"].tolist(),
+            hovertemplate="<b>%{text}</b> (Importer)<extra></extra>",
+            legendgroup=group_name,
+            showlegend=False,
+        ))
+
+    # labels for key countries on outer ring
+    key_labels = ["USA", "CHN", "RUS", "GBR", "IND", "BRA", "JPN", "KOR",
+                  "SAU", "TUR", "DEU", "AUS", "ZAF", "MEX", "CAN", "VNM"]
+    for _, row in df[df["iso3"].isin(key_labels)].iterrows():
+        fig.add_annotation(
+            x=row["u_cx"], y=row["u_cy"], text=row["iso3"],
+            showarrow=False, font=dict(size=9, color="#333333"),
+            yshift=max(8, row["u_size"] / 2 + 4),
+        )
+
+    fig.update_layout(
+        title=dict(text=f"Trade Alignment Space ({year})", y=0.98),
         height=700, margin=dict(t=100, l=20, r=20, b=20),
         legend=dict(orientation="h", yanchor="bottom", y=1.08, x=0.5, xanchor="center"),
         xaxis=dict(showgrid=False, zeroline=False, showticklabels=False,
